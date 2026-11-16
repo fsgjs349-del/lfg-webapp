@@ -6,7 +6,6 @@
     <title>LFG | Looking For Group</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* --- СБРОС И БАЗА --- */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -16,7 +15,6 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            perspective: 1200px;
         }
 
         /* --- ШАПКА --- */
@@ -24,13 +22,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             position: relative;
             z-index: 10;
             flex-shrink: 0;
         }
         .logo-main {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 900;
             letter-spacing: 2px;
             background: linear-gradient(90deg, #ff007f, #b900ff);
@@ -49,20 +47,18 @@
         .settings-btn {
             position: absolute;
             right: 20px;
-            top: 20px;
+            top: 15px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
         }
-        .settings-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.1); }
-        .settings-btn svg { width: 22px; height: 22px; fill: #aaa; }
+        .settings-btn svg { width: 20px; height: 20px; fill: #aaa; }
 
         /* --- ОСНОВНОЙ ЭКРАН --- */
         .main-screen {
@@ -70,52 +66,46 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
             overflow: hidden;
+            transition: transform 0.3s, opacity 0.3s;
         }
         .main-screen.hide {
-            transform: translateX(-50%) scale(0.9);
+            transform: translateX(-50%);
             opacity: 0;
-            pointer-events: none;
         }
 
         /* Карточка */
         .card-container {
-            flex: 1;
+            flex: 1; /* Занимает всё доступное место */
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
-            overflow: hidden;
+            min-height: 0; /* Важно, чтобы не выталкивало */
         }
         .profile-card {
             width: 90%;
-            max-width: 350px;
-            height: 100%;
-            max-height: 480px;
+            max-width: 340px;
+            height: 100%; /* Занимает высоту контейнера */
             background: linear-gradient(145deg, #16161e, #1c1c26);
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease;
         }
-        .profile-card h2 { color: #333; font-size: 24px; margin-bottom: 10px; }
-        .profile-card p { color: #444; font-size: 14px; text-align: center; }
+        .profile-card h2 { color: #333; font-size: 22px; margin-bottom: 5px; }
+        .profile-card p { color: #444; font-size: 13px; }
 
-        /* --- КНОПКИ ДЕЙСТВИЙ (Крест, гамепад и т.д.) --- */
+        /* --- КНОПКИ ДЕЙСТВИЙ --- */
         .action-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px; /* Расстояние между кнопками */
-            padding: 15px 10px;
-            z-index: 5;
-            flex-shrink: 0;
+            gap: 10px;
+            padding: 10px;
+            flex-shrink: 0; /* Не сжимается */
         }
         
         .btn-action {
@@ -125,41 +115,36 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 -4px 0 rgba(0,0,0,0.3);
-            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
             position: relative;
             flex-shrink: 0;
         }
-        .btn-action:active { transform: translateY(3px); box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 -1px 0 rgba(0,0,0,0.3); }
         
-        /* Маленькие кнопки */
-        .btn-small { width: 46px; height: 46px; background: linear-gradient(145deg, #1f1f2a, #15151c); }
-        .btn-small svg { width: 20px; height: 20px; fill: #666; }
+        .btn-small { width: 42px; height: 42px; background: #1f1f2a; }
+        .btn-small svg { width: 18px; height: 18px; fill: #666; }
         .btn-small .svg-green { fill: #00ffaa; }
         
-        /* Большие кнопки */
-        .btn-large { width: 65px; height: 65px; }
+        .btn-large { width: 60px; height: 60px; }
         .btn-dislike { background: linear-gradient(145deg, #ff3b5c, #cc1e3b); }
-        .btn-dislike svg { width: 28px; height: 28px; fill: white; }
+        .btn-dislike svg { width: 26px; height: 26px; fill: white; }
         .btn-match { background: linear-gradient(145deg, #00ffaa, #00cc88); }
-        .btn-match svg { width: 30px; height: 30px; fill: #0b0b0f; }
+        .btn-match svg { width: 28px; height: 28px; fill: #0b0b0f; }
 
-        /* Бейджики */
         .badge {
             position: absolute;
-            top: -2px;
-            right: -2px;
+            top: 0px;
+            right: 0px;
             background: #ff007f;
             color: white;
             font-size: 10px;
             font-weight: bold;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid #0b0b0f;
+            border: 1px solid #0b0b0f;
         }
 
         /* --- НИЖНЕЕ МЕНЮ НАВИГАЦИИ --- */
@@ -168,43 +153,40 @@
             justify-content: space-around;
             align-items: center;
             background: #121218;
-            padding: 12px 10px;
+            padding: 10px 5px;
             padding-bottom: env(safe-area-inset-bottom, 15px);
             border-top: 1px solid rgba(255,255,255,0.05);
             z-index: 10;
-            flex-shrink: 0;
+            flex-shrink: 0; /* ВАЖНО: не дает меню сжаться или уехать вниз */
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             color: #555;
             cursor: pointer;
-            transition: color 0.3s, transform 0.2s;
             position: relative;
         }
-        .nav-item:active { transform: scale(0.9); }
         .nav-item.active { color: #b900ff; }
-        .nav-item svg { width: 22px; height: 22px; fill: currentColor; transition: fill 0.3s; }
-        .nav-item span { font-size: 10px; font-weight: 500; }
-        .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(185, 0, 255, 0.6)); }
+        .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
+        .nav-item span { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; }
         
-        /* Бейдж на иконке Пати */
         .nav-badge {
             position: absolute;
             top: -5px;
-            right: 2px;
+            right: 5px;
             background: #333;
             color: white;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: bold;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
+            border: 1px solid #121218;
         }
 
         /* --- ЭКРАН НАСТРОЕК --- */
@@ -217,11 +199,10 @@
             background: #0b0b0f;
             z-index: 20;
             transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            padding-top: env(safe-area-inset-top, 30px);
             overflow-y: auto;
         }
         .settings-screen.active { transform: translateY(0); }
@@ -229,154 +210,117 @@
         .settings-header {
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
-            font-size: 20px;
+            margin-bottom: 20px;
+            font-size: 18px;
             font-weight: bold;
         }
         .back-btn {
             background: none;
             border: none;
             color: #fff;
-            font-size: 24px;
-            margin-right: 15px;
+            font-size: 20px;
+            margin-right: 10px;
             cursor: pointer;
         }
 
-        .settings-group { margin-bottom: 20px; }
+        .settings-group { margin-bottom: 15px; }
         .settings-group-title {
             font-size: 11px;
             color: #666;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
         
-        /* Переключатели */
         .toggle-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #16161e;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 10px;
             font-size: 14px;
         }
         .toggle-switch {
             position: relative;
-            width: 44px;
-            height: 24px;
+            width: 40px;
+            height: 22px;
             background: #333;
-            border-radius: 12px;
+            border-radius: 11px;
             cursor: pointer;
-            transition: 0.3s;
         }
         .toggle-switch::after {
             content: '';
             position: absolute;
             top: 2px;
             left: 2px;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             background: white;
             border-radius: 50%;
-            transition: 0.3s;
+            transition: 0.2s;
         }
         .toggle-switch.on { background: #b900ff; }
-        .toggle-switch.on::after { transform: translateX(20px); }
+        .toggle-switch.on::after { transform: translateX(18px); }
 
-        /* Кнопки-теги */
         .tags-container { display: flex; gap: 8px; flex-wrap: wrap; }
         .tag-btn {
-            padding: 12px 15px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             background: #16161e;
             border: 1px solid #333;
             color: #888;
             font-size: 13px;
-            font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
             flex: 1;
-            text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
         .tag-btn svg { width: 16px; height: 16px; fill: currentColor; }
         .tag-btn.active {
             border-color: #00ffaa;
             color: #00ffaa;
             background: rgba(0, 255, 170, 0.05);
-            box-shadow: 0 0 15px rgba(0, 255, 170, 0.1);
         }
 
-        /* Ползунок возраста */
-        .age-slider-container {
-            position: relative;
-            padding: 10px 0;
-        }
-        .age-value {
-            font-size: 22px;
-            font-weight: bold;
-            color: #fff;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        .age-slider-container { padding: 5px 0; }
+        .age-value { font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 10px; }
         .range-slider {
             -webkit-appearance: none;
             width: 100%;
-            height: 6px;
+            height: 5px;
             background: #333;
             border-radius: 3px;
-            outline: none;
         }
         .range-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             background: #fff;
             border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255,255,255,0.4);
             border: 3px solid #b900ff;
         }
-        .slider-ticks {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 10px;
-            margin-top: 8px;
-        }
-        .slider-ticks span {
-            width: 2px;
-            height: 6px;
-            background: #333;
-            border-radius: 1px;
-        }
+        .slider-ticks { display: flex; justify-content: space-between; padding: 0 5px; margin-top: 5px; }
+        .slider-ticks span { width: 2px; height: 4px; background: #333; }
 
-        /* Кнопка Сохранить */
         .save-btn {
             margin-top: auto;
             background: linear-gradient(90deg, #b900ff, #ff007f);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 16px;
+            padding: 15px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(185, 0, 255, 0.3), inset 0 -3px 0 rgba(0,0,0,0.2);
-            transition: transform 0.1s, box-shadow 0.1s;
             margin-bottom: 10px;
         }
-        .save-btn:active { transform: translateY(3px); box-shadow: 0 5px 10px rgba(185, 0, 255, 0.3), inset 0 -1px 0 rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-    <!-- Шапка -->
     <header>
         <div>
             <div class="logo-main">LFG</div>
@@ -387,7 +331,6 @@
         </button>
     </header>
 
-    <!-- Основной экран -->
     <div class="main-screen" id="mainScreen">
         <div class="card-container">
             <div class="profile-card" id="card3D">
@@ -396,7 +339,6 @@
             </div>
         </div>
         
-        <!-- Кнопки действий -->
         <div class="action-row">
             <button class="btn-action btn-small">
                 <div class="badge">0</div>
@@ -418,7 +360,7 @@
         </div>
     </div>
 
-    <!-- Нижнее меню навигации -->
+    <!-- НИЖНЕЕ МЕНЮ -->
     <nav class="bottom-nav">
         <div class="nav-item active">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
@@ -443,7 +385,7 @@
         </div>
     </nav>
 
-    <!-- Экран настроек -->
+    <!-- ЭКРАН НАСТРОЕК -->
     <div class="settings-screen" id="settingsScreen">
         <div class="settings-header">
             <button class="back-btn" onclick="toggleSettings()">←</button>
@@ -470,15 +412,9 @@
         <div class="settings-group">
             <div class="settings-group-title">Пол тиммейтов</div>
             <div class="tags-container">
-                <button class="tag-btn active" onclick="selectGender(this)">
-                    Не важно
-                </button>
-                <button class="tag-btn" onclick="selectGender(this)">
-                    Парней
-                </button>
-                <button class="tag-btn" onclick="selectGender(this)">
-                    Девушек
-                </button>
+                <button class="tag-btn active" onclick="selectGender(this)">Не важно</button>
+                <button class="tag-btn" onclick="selectGender(this)">Парней</button>
+                <button class="tag-btn" onclick="selectGender(this)">Девушек</button>
             </div>
         </div>
 
@@ -496,9 +432,61 @@
         <div class="settings-group">
             <div class="settings-group-title">Платформы</div>
             <div class="tags-container">
-                <button class="tag-btn">
-                    <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg>
-                    ПК
-                </button>
-                <button class="tag-btn active">
-                    <svg viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-
+                <button class="tag-btn">ПК</button>
+                <button class="tag-btn active">Консоли</button>
+                <button class="tag-btn">Телефон</button>
+            </div>
+        </div>
+
+        <button class="save-btn" onclick="toggleSettings()">Сохранить</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function toggleSettings() {
+            document.getElementById('settingsScreen').classList.toggle('active');
+            document.getElementById('mainScreen').classList.toggle('hide');
+        }
+
+        function updateAge(val) {
+            document.getElementById('ageDisplay').innerText = '18 - ' + val;
+        }
+
+        function selectGender(btn) {
+            let parent = btn.parentElement;
+            parent.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // 3D эффект
+        const card = document.getElementById('card3D');
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 768) return; 
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        document.addEventListener('touchend', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        // Вибро
+        document.querySelectorAll('button, .nav-item').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            });
+        });
+
+        // Навигация
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
