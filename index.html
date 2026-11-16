@@ -10,13 +10,13 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0f0f13;
+            background-color: #0b0b0f;
             color: #ffffff;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            perspective: 1000px; /* Для 3D эффектов */
+            perspective: 1200px;
         }
 
         /* --- ШАПКА --- */
@@ -28,117 +28,168 @@
             position: relative;
             z-index: 10;
         }
-        .logo-container {
-            text-align: center;
-        }
         .logo-main {
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 900;
             letter-spacing: 2px;
-            background: linear-gradient(90deg, #ff6b00, #ff00cc, #00e5ff);
+            background: linear-gradient(90deg, #ff007f, #b900ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
         }
         .logo-sub {
             font-size: 10px;
             letter-spacing: 4px;
-            color: #888;
+            color: #666;
             text-transform: uppercase;
             margin-top: 5px;
+            text-align: center;
         }
-
-        /* Кнопка настроек в углу */
         .settings-btn {
             position: absolute;
             right: 20px;
-            top: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            font-size: 22px;
+            width: 44px;
+            height: 44px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.3s, background 0.3s;
+            transition: transform 0.2s, background 0.2s;
         }
-        .settings-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.2); }
+        .settings-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.1); }
+        .settings-btn svg { width: 22px; height: 22px; fill: #aaa; }
 
-        /* --- ОСНОВНОЙ ЭКРАН (КАРТОЧКИ) --- */
+        /* --- ОСНОВНОЙ ЭКРАН --- */
         .main-screen {
             flex: 1;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             position: relative;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
         }
         .main-screen.hide {
-            transform: translateX(-100%) scale(0.9);
+            transform: translateX(-50%) scale(0.9);
             opacity: 0;
             pointer-events: none;
         }
 
         /* 3D Карточка */
-        .profile-card {
-            width: 85%;
-            max-width: 350px;
-            height: 55vh;
-            background: linear-gradient(145deg, #1a1a24, #242432);
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            position: absolute;
-            transition: transform 0.1s ease, box-shadow 0.3s ease;
-            transform-style: preserve-3d;
-            user-select: none;
-        }
-        .profile-card .placeholder-text {
-            text-align: center;
-            color: #666;
-            font-size: 16px;
-        }
-
-        /* --- НИЖНИЕ КНОПКИ --- */
-        .action-buttons {
+        .card-container {
+            flex: 1;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 30px 20px;
-            padding-bottom: env(safe-area-inset-bottom, 40px);
-            z-index: 10;
+            align-items: center;
+            padding: 10px;
         }
-        .btn-round {
-            width: 65px;
-            height: 65px;
+        .profile-card {
+            width: 90%;
+            max-width: 380px;
+            height: 100%;
+            max-height: 500px;
+            background: linear-gradient(145deg, #16161e, #1c1c26);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+        }
+        .profile-card h2 { color: #333; font-size: 24px; margin-bottom: 10px; }
+        .profile-card p { color: #444; font-size: 14px; }
+
+        /* --- НИЖНИЕ КНОПКИ ДЕЙСТВИЙ (Дизлайк, Лайк и т.д.) --- */
+        .action-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            z-index: 5;
+        }
+        .btn-action {
             border-radius: 50%;
             border: none;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 -3px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 -4px 0 rgba(0,0,0,0.3);
             transition: transform 0.1s, box-shadow 0.1s;
+            position: relative;
         }
-        .btn-round:active { transform: translateY(4px); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .btn-skip { background: linear-gradient(145deg, #ff477e, #d61a50); color: white; }
-        .btn-like { background: linear-gradient(145deg, #00e5a0, #00b37d); color: white; }
+        .btn-action:active { transform: translateY(4px); box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 -2px 0 rgba(0,0,0,0.3); }
+        
+        /* Маленькие кнопки (назад, звезда, сообщение) */
+        .btn-small { width: 50px; height: 50px; background: linear-gradient(145deg, #1f1f2a, #15151c); }
+        .btn-small svg { width: 20px; height: 20px; fill: #666; }
+        
+        /* Большие кнопки (Крест, Гамепад) */
+        .btn-large { width: 80px; height: 80px; }
+        .btn-dislike { background: linear-gradient(145deg, #ff3b5c, #cc1e3b); }
+        .btn-dislike svg { width: 32px; height: 32px; fill: white; }
+        .btn-match { background: linear-gradient(145deg, #00ffaa, #00cc88); }
+        .btn-match svg { width: 36px; height: 36px; fill: #0b0b0f; }
 
-        /* --- НАСТРОЙКИ (ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ) --- */
+        /* Бейджики (цифры на кнопках) */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff007f;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #0b0b0f;
+        }
+
+        /* --- НИЖНЕЕ МЕНЮ НАВИГАЦИИ --- */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #121218;
+            padding: 15px 10px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            z-index: 10;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+        }
+        .nav-item:active { transform: scale(0.9); }
+        .nav-item.active { color: #b900ff; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; transition: fill 0.3s; }
+        .nav-item span { font-size: 11px; font-weight: 500; }
+        
+        /* Индикатор активной вкладки (свечение) */
+        .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(185, 0, 255, 0.6)); }
+
+        /* --- ЭКРАН НАСТРОЕК --- */
         .settings-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0f0f13;
+            background: #0b0b0f;
             z-index: 20;
             transform: translateY(100%);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -148,14 +199,12 @@
             padding-top: env(safe-area-inset-top, 40px);
             overflow-y: auto;
         }
-        .settings-screen.active {
-            transform: translateY(0);
-        }
+        .settings-screen.active { transform: translateY(0); }
         
         .settings-header {
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 20px;
             font-weight: bold;
         }
@@ -168,23 +217,22 @@
             cursor: pointer;
         }
 
-        /* Стили настроек (как на скринах) */
-        .settings-group { margin-bottom: 30px; }
+        .settings-group { margin-bottom: 25px; }
         .settings-group-title {
             font-size: 12px;
-            color: #888;
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
             font-weight: 600;
         }
         
-        /* Переключатели (Toggles) */
+        /* Переключатели */
         .toggle-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #1a1a24;
+            background: #16161e;
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 10px;
@@ -210,30 +258,48 @@
             border-radius: 50%;
             transition: 0.3s;
         }
-        .toggle-switch.on { background: #9c27b0; }
+        .toggle-switch.on { background: #b900ff; }
         .toggle-switch.on::after { transform: translateX(22px); }
 
-        /* Кнопки-теги (платформы, пол) */
+        /* Кнопки-теги */
         .tags-container { display: flex; gap: 10px; flex-wrap: wrap; }
         .tag-btn {
-            padding: 12px 20px;
+            padding: 14px 20px;
             border-radius: 12px;
-            background: #1a1a24;
+            background: #16161e;
             border: 1px solid #333;
-            color: #aaa;
+            color: #888;
             font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
             flex: 1;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
+        .tag-btn svg { width: 18px; height: 18px; fill: currentColor; }
         .tag-btn.active {
-            border-color: #00e5a0;
-            color: #00e5a0;
-            background: rgba(0, 229, 160, 0.1);
+            border-color: #00ffaa;
+            color: #00ffaa;
+            background: rgba(0, 255, 170, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.1);
         }
 
-        /* Ползунок возраста */
+        /* Ползунок возраста (с делениями) */
+        .age-slider-container {
+            position: relative;
+            padding: 10px 0;
+        }
+        .age-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 15px;
+        }
         .range-slider {
             -webkit-appearance: none;
             width: 100%;
@@ -241,22 +307,35 @@
             background: #333;
             border-radius: 3px;
             outline: none;
-            margin-top: 10px;
         }
         .range-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            background: white;
+            width: 28px;
+            height: 28px;
+            background: #fff;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            box-shadow: 0 0 15px rgba(255,255,255,0.4);
+            border: 4px solid #b900ff;
+        }
+        /* Деления под ползунком */
+        .slider-ticks {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-top: 10px;
+        }
+        .slider-ticks span {
+            width: 2px;
+            height: 6px;
+            background: #333;
+            border-radius: 1px;
         }
 
         /* Кнопка Сохранить */
         .save-btn {
             margin-top: auto;
-            background: linear-gradient(90deg, #a855f7, #ec4899);
+            background: linear-gradient(90deg, #b900ff, #ff007f);
             color: white;
             border: none;
             padding: 18px;
@@ -264,38 +343,81 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
-            transition: transform 0.2s;
+            box-shadow: 0 10px 20px rgba(185, 0, 255, 0.3), inset 0 -3px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s, box-shadow 0.1s;
         }
-        .save-btn:active { transform: scale(0.98); }
+        .save-btn:active { transform: translateY(3px); box-shadow: 0 5px 10px rgba(185, 0, 255, 0.3), inset 0 -1px 0 rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
     <!-- Шапка -->
     <header>
-        <div class="logo-container">
+        <div>
             <div class="logo-main">LFG</div>
             <div class="logo-sub">Looking for group</div>
         </div>
-        <button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+        <button class="settings-btn" onclick="toggleSettings()">
+            <!-- Иконка Шестеренки (SVG) -->
+            <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+        </button>
     </header>
 
     <!-- Основной экран -->
     <div class="main-screen" id="mainScreen">
-        <div class="profile-card" id="card3D">
-            <div class="placeholder-text">
-                <h2 style="margin-bottom:10px">Анкета</h2>
+        <div class="card-container">
+            <div class="profile-card" id="card3D">
+                <h2>Анкета</h2>
                 <p>Здесь будут появляться<br>тиммейты</p>
             </div>
         </div>
+        
+        <!-- Кнопки действий (Крест, Гамепад, и т.д.) -->
+        <div class="action-row">
+            <button class="btn-action btn-small">
+                <div class="badge">0</div>
+                <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+            </button>
+            <button class="btn-action btn-large btn-dislike">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            <button class="btn-action btn-small">
+                <svg viewBox="0 0 24 24" style="fill:#00ffaa;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button class="btn-action btn-large btn-match">
+                <svg viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4-1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+            </button>
+            <button class="btn-action btn-small">
+                <div class="badge">1</div>
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </button>
+        </div>
     </div>
 
-    <!-- Нижние кнопки (дизлайк/лайк) -->
-    <div class="action-buttons" id="actionButtons">
-        <button class="btn-round btn-skip">✖</button>
-        <button class="btn-round btn-like">✔</button>
-    </div>
+    <!-- Нижнее меню навигации -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <span>Поиск</span>
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span>Лайки</span>
+        </div>
+        <div class="nav-item" style="position:relative;">
+            <div class="badge" style="top:-5px; right:5px;">5</div>
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span>Пати</span>
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            <span>Чаты</span>
+        </div>
+        <div class="nav-item">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Профиль</span>
+        </div>
+    </nav>
 
     <!-- Экран настроек -->
     <div class="settings-screen" id="settingsScreen">
@@ -304,106 +426,55 @@
             Настройки поиска
         </div>
 
-        <!-- Автоподбор -->
         <div class="settings-group">
             <div class="toggle-row">
-                <span>✨ Подобрать автоматически</span>
+                <span>Подобрать автоматически</span>
                 <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
             </div>
         </div>
 
-        <!-- Что ищу -->
         <div class="settings-group">
             <div class="settings-group-title">Что ищу</div>
             <div class="tags-container">
-                <button class="tag-btn">💖 Няшек</button>
-                <button class="tag-btn active">🎮 Тиммейтов</button>
+                <button class="tag-btn active">
+                    <svg viewBox="0 0 24 24"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4-1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+                    Тиммейтов
+                </button>
             </div>
         </div>
 
-        <!-- Пол -->
         <div class="settings-group">
             <div class="settings-group-title">Пол тиммейтов</div>
             <div class="tags-container">
-                <button class="tag-btn active">💙💖 Не важно</button>
+                <button class="tag-btn active" onclick="selectGender(this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                    Не важно
+                </button>
+                <button class="tag-btn" onclick="selectGender(this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    Парней
+                </button>
+                <button class="tag-btn" onclick="selectGender(this)">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    Девушек
+                </button>
             </div>
         </div>
 
-        <!-- Возраст -->
         <div class="settings-group">
-            <div class="settings-group-title">Возраст (18-75)</div>
-            <input type="range" class="range-slider" min="18" max="75" value="25">
+            <div class="settings-group-title">Возраст</div>
+            <div class="age-slider-container">
+                <div class="age-value" id="ageDisplay">18 - 75</div>
+                <input type="range" class="range-slider" min="18" max="75" value="75" id="ageRange" oninput="updateAge(this.value)">
+                <!-- Деления (полоски) -->
+                <div class="slider-ticks">
+                    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
         </div>
 
-        <!-- Платформы -->
         <div class="settings-group">
             <div class="settings-group-title">Платформы</div>
             <div class="tags-container">
-                <button class="tag-btn">🖥 ПК</button>
-                <button class="tag-btn active">🎮 Консоли</button>
-                <button class="tag-btn">📱 Телефон</button>
-            </div>
-        </div>
-
-        <!-- Кнопка Сохранить -->
-        <button class="save-btn" onclick="toggleSettings()">Сохранить</button>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        // --- Логика открытия/закрытия настроек ---
-        function toggleSettings() {
-            const settingsScreen = document.getElementById('settingsScreen');
-            const mainScreen = document.getElementById('mainScreen');
-            const actionButtons = document.getElementById('actionButtons');
-            
-            settingsScreen.classList.toggle('active');
-            
-            if (settingsScreen.classList.contains('active')) {
-                mainScreen.classList.add('hide');
-                actionButtons.style.opacity = '0';
-            } else {
-                mainScreen.classList.remove('hide');
-                actionButtons.style.opacity = '1';
-            }
-        }
-
-        // --- 3D Эффект наклона карточки ---
-        const card = document.getElementById('card3D');
-        
-        document.addEventListener('mousemove', (e) => {
-            if (window.innerWidth > 768) return; // Отключаем на телефоне при скролле, чтобы не мешало
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
-            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-        });
-
-        // Сброс при отпускании (для тач-экранов)
-        document.addEventListener('touchend', () => {
-            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-        });
-
-        // Добавляем эффект нажатия на кнопки-теги
-        document.querySelectorAll('.tag-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Убираем active у всех в этой группе
-                let parent = this.parentElement;
-                parent.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-                // Добавляем текущей
-                this.classList.add('active');
-            });
-        });
-
-        // Эффект нажатия на круглые кнопки
-        document.querySelectorAll('.btn-round').forEach(btn => {
-            btn.addEventListener('click', function() {
-                tg.HapticFeedback.impactOccurred('medium');
-                this.style.transform = 'scale(0.8)';
-                setTimeout(() => this.style.transform = 'scale(1)', 150);
-            });
-        });
-    </script>
-</body>
-</html>
+                <button class="tag-btn">
+                    <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9
