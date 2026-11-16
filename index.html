@@ -12,9 +12,9 @@
             background-color: #0b0b0f;
             color: #ffffff;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            overflow: hidden; /* Запрещаем скролл всей страницы */
         }
 
         /* --- ШАПКА --- */
@@ -62,7 +62,7 @@
 
         /* --- ОСНОВНОЙ ЭКРАН --- */
         .main-screen {
-            flex: 1;
+            flex: 1; /* Занимает всё свободное место между шапкой и меню */
             display: flex;
             flex-direction: column;
             position: relative;
@@ -76,17 +76,18 @@
 
         /* Карточка */
         .card-container {
-            flex: 1; /* Занимает всё доступное место */
+            flex: 1; /* Растягивается */
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
-            min-height: 0; /* Важно, чтобы не выталкивало */
+            min-height: 0; /* Важно! Позволяет элементу сжиматься */
         }
         .profile-card {
             width: 90%;
             max-width: 340px;
-            height: 100%; /* Занимает высоту контейнера */
+            height: 100%;
+            max-height: 100%; /* Не вылезает за пределы контейнера */
             background: linear-gradient(145deg, #16161e, #1c1c26);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -105,7 +106,7 @@
             align-items: center;
             gap: 10px;
             padding: 10px;
-            flex-shrink: 0; /* Не сжимается */
+            flex-shrink: 0; 
         }
         
         .btn-action {
@@ -157,7 +158,7 @@
             padding-bottom: env(safe-area-inset-bottom, 15px);
             border-top: 1px solid rgba(255,255,255,0.05);
             z-index: 10;
-            flex-shrink: 0; /* ВАЖНО: не дает меню сжаться или уехать вниз */
+            flex-shrink: 0; /* ЖЕСТКО ФИКСИРУЕМ МЕНЮ ВНИЗУ */
         }
         .nav-item {
             display: flex;
@@ -169,8 +170,8 @@
             position: relative;
         }
         .nav-item.active { color: #b900ff; }
-        .nav-item svg { width: 20px; height: 20px; fill: currentColor; }
-        .nav-item span { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; }
+        .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
+        .nav-item span { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
         
         .nav-badge {
             position: absolute;
@@ -189,7 +190,7 @@
             border: 1px solid #121218;
         }
 
-        /* --- ЭКРАН НАСТРОЕК --- */
+        /* --- ЭКРАН НАСТРОЕК (ОСТАВЛЕН БЕЗ ИЗМЕНЕНИЙ) --- */
         .settings-screen {
             position: absolute;
             top: 0;
@@ -385,7 +386,7 @@
         </div>
     </nav>
 
-    <!-- ЭКРАН НАСТРОЕК -->
+    <!-- ЭКРАН НАСТРОЕК (без изменений) -->
     <div class="settings-screen" id="settingsScreen">
         <div class="settings-header">
             <button class="back-btn" onclick="toggleSettings()">←</button>
