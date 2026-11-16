@@ -3,172 +3,160 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>DOUBLEMID — поиск тиммейтов</title>
+<meta name="theme-color" content="#0d0b15">
+<title>LFG — Looking For Group</title>
 <style>
-:root{--bg:#0d0b15;--teal:#2fe6c8;--pink:#ff5c8a;--text:#eef;--muted:#8b87a3}
+:root{--bg:#0d0b15;--teal:#2fe6c8;--teal-d:#0e8f7a;--pink:#ff5c8a;--pink-d:#a12348;
+--text:#eef;--muted:#918da9;--panel:#1c1930}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;color:var(--text);
   background:radial-gradient(1000px 700px at 85% -10%,#2a1f4d 0%,transparent 55%),
              radial-gradient(900px 700px at -10% 110%,#123a3a 0%,transparent 55%),var(--bg);
-  display:flex;flex-direction:column;overflow:hidden;user-select:none}
-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 4px}
-.close{background:none;border:none;color:var(--text);font-size:15px;cursor:pointer;opacity:.85}
-.logo{font-weight:800;letter-spacing:2px;font-size:20px;
+  display:flex;flex-direction:column;overflow:hidden;user-select:none;-webkit-user-select:none}
+
+/* плавающие 3D-иконки на фоне */
+.deco{position:fixed;font-size:30px;opacity:.15;pointer-events:none;z-index:0;
+  animation:float 10s ease-in-out infinite}
+.deco:nth-of-type(2){animation-duration:13s;animation-delay:-4s}
+.deco:nth-of-type(3){animation-duration:8s;animation-delay:-2s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-28px) rotate(12deg)}}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 2px;position:relative;z-index:2}
+.close{background:linear-gradient(180deg,#262146,#1a1730);border:none;color:#c9c5e0;font-size:14px;
+  cursor:pointer;padding:8px 14px;border-radius:12px;
+  box-shadow:0 4px 0 #0c0a18,0 8px 16px #0008,inset 0 1px 0 #ffffff1f;transition:transform .1s,box-shadow .1s}
+.close:active{transform:translateY(3px);box-shadow:0 1px 0 #0c0a18,0 3px 8px #0008,inset 0 1px 0 #ffffff1f}
+.logo{text-align:right;line-height:1}
+.logo b{font-size:26px;letter-spacing:3px;font-weight:900;
   background:linear-gradient(90deg,#ff8ad4,#b28bff,#2fe6c8);
-  -webkit-background-clip:text;background-clip:text;color:transparent}
-.tabs{display:flex;gap:8px;padding:10px 14px}
-.tabs button{border:none;background:#1c1930;color:#c9c5e0;font-weight:700;font-size:13px;
-  padding:10px 16px;border-radius:999px;cursor:pointer;letter-spacing:.5px}
-.tabs button.active{background:var(--teal);color:#06231e}
-main{flex:1;display:flex;flex-direction:column;align-items:center;padding:4px 14px 0;min-height:0}
-#stack{position:relative;width:100%;max-width:400px;flex:1;max-height:620px}
-.card{position:absolute;inset:0;border-radius:26px;overflow:hidden;background:#161321;
-  border:1px solid #2ee6c844;box-shadow:0 12px 40px #000a;touch-action:none;will-change:transform;cursor:grab}
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 4px #000a)}
+.logo small{display:block;font-size:9px;letter-spacing:4px;color:var(--muted);margin-top:3px}
+
+.tabs{display:flex;gap:10px;padding:12px 14px;position:relative;z-index:2}
+.tabs button{border:none;cursor:pointer;font-weight:800;font-size:13px;padding:11px 16px;border-radius:14px;
+  background:linear-gradient(180deg,#262146,#1a1730);color:#c9c5e0;letter-spacing:.5px;
+  box-shadow:0 4px 0 #0c0a18,0 8px 18px #0008,inset 0 1px 0 #ffffff1f;transition:transform .1s,box-shadow .1s}
+.tabs button:active{transform:translateY(3px);box-shadow:0 1px 0 #0c0a18,0 3px 8px #0008,inset 0 1px 0 #ffffff1f}
+.tabs button.active{background:linear-gradient(180deg,#43f0d3,#17b89b);color:#04211c;
+  box-shadow:0 4px 0 var(--teal-d),0 10px 22px #2fe6c833,inset 0 1px 0 #ffffff66}
+
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 14px 0;min-height:0;position:relative;z-index:1}
+#stage{position:relative;width:100%;max-width:400px;flex:1;min-height:340px;max-height:600px;perspective:1100px}
+.card{position:absolute;inset:0;border-radius:26px;overflow:hidden;background:var(--panel);
+  border:1px solid #2ee6c844;box-shadow:0 14px 44px #000c,inset 0 1px 0 #ffffff14;
+  touch-action:none;will-change:transform;transform-style:preserve-3d;cursor:grab;
+  transition:transform .35s cubic-bezier(.2,.8,.3,1),opacity .35s}
 .card:active{cursor:grabbing}
-.photo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:110px;cursor:pointer}
+.photo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:110px}
+.photo::after{content:'';position:absolute;inset:0;box-shadow:inset 0 -80px 60px -40px #00000080}
 .bars{position:absolute;top:10px;left:12px;right:12px;display:flex;gap:6px;z-index:3}
 .bars i{flex:1;height:4px;border-radius:4px;background:#ffffff42}
 .bars i.on{background:#fff}
-.chip-game{position:absolute;top:22px;right:14px;background:var(--teal);color:#04211c;
-  font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px;z-index:3}
+.chip-game{position:absolute;top:22px;right:14px;background:linear-gradient(180deg,#43f0d3,#17b89b);
+  color:#04211c;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;z-index:3;
+  box-shadow:0 3px 0 var(--teal-d),0 8px 16px #0008}
 .info{position:absolute;left:0;right:0;bottom:0;padding:14px 16px 16px;z-index:3;
-  background:linear-gradient(180deg,transparent,rgba(5,4,10,.9) 40%)}
+  background:linear-gradient(180deg,transparent,rgba(5,4,10,.92) 40%)}
 .tag{display:inline-block;border:1px solid #e8c96a66;color:#e8c96a;font-size:12px;padding:4px 10px;border-radius:999px;margin-bottom:8px}
 .name{font-size:30px;font-weight:800}
 .name span{color:var(--teal)}
 .meta{display:flex;align-items:center;gap:10px;font-size:15px;margin-top:4px}
 .meta b{color:#ffffff55;font-weight:400}
 .game-row{display:flex;gap:8px;margin-top:10px}
-.game{display:flex;gap:8px;background:#0f2c28cc;border:1px solid var(--teal);padding:6px 12px;border-radius:14px;font-weight:700}
+.game{display:flex;gap:8px;background:#0f2c28cc;border:1px solid var(--teal);padding:6px 12px;border-radius:14px;font-weight:700;
+  box-shadow:0 3px 0 #083b33,0 6px 12px #0007}
 .game small{color:#9fe9dc;font-weight:600}
-.plus{background:#ffffff1c;padding:6px 12px;border-radius:12px;font-weight:700}
+.plus{background:#ffffff1c;padding:6px 12px;border-radius:12px;font-weight:700;box-shadow:0 3px 0 #00000055}
 .stamp{position:absolute;top:34px;padding:8px 18px;font-size:28px;font-weight:900;letter-spacing:2px;
   border:4px solid;border-radius:12px;opacity:0;z-index:4;pointer-events:none}
-.s-like{left:20px;color:var(--teal);border-color:var(--teal);transform:rotate(-18deg)}
-.s-nope{right:20px;color:var(--pink);border-color:var(--pink);transform:rotate(18deg)}
-.actions{display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 0 10px}
-.actions button{border:none;border-radius:50%;cursor:pointer;display:grid;place-items:center;
-  color:var(--text);position:relative;transition:transform .12s}
-.actions button:active{transform:scale(.88)}
-.btn-sm{width:52px;height:52px;background:#1c1930;font-size:20px}
-.btn-lg{width:74px;height:74px;font-size:30px}
-#nope{background:#2a1220;color:var(--pink);box-shadow:0 6px 20px #ff5c8a33}
-#like{background:var(--teal);color:#04211c;font-size:34px;box-shadow:0 8px 26px #2fe6c855}
-.dot{position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--teal);
-  color:#04211c;font-size:12px;font-weight:800;display:grid;place-items:center}
-nav{display:flex;justify-content:space-around;padding:10px 6px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #ffffff12}
-nav div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--muted);cursor:pointer;position:relative}
-nav .on{color:#c9a6ff}
-nav b{position:absolute;top:-6px;right:2px;background:#4b3d75;color:#fff;font-size:10px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center}
-#modal{position:fixed;inset:0;background:#000a;display:grid;place-items:center;z-index:50}
-#modal .box{background:#181428;border:1px solid #2ee6c844;border-radius:20px;padding:20px;width:90%;max-width:340px}
+.s-like{left:20px;color:var(--teal);border-color:var(--teal);transform:rotate(-18deg);text-shadow:0 2px 8px #2fe6c888}
+.s-nope{right:20px;color:var(--pink);border-color:var(--pink);transform:rotate(18deg);text-shadow:0 2px 8px #ff5c8a88}
+
+/* кнопки действий — 3D */
+.actions{display:flex;align-items:center;justify-content:center;gap:18px;padding:16px 0 12px;position:relative;z-index:2}
+.abtn{border:none;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:#fff;position:relative;
+  transition:transform .1s,box-shadow .1s}
+.abtn:active{transform:translateY(5px) scale(.96)}
+.abtn .dot{position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--teal);
+  color:#04211c;font-size:12px;font-weight:800;display:grid;place-items:center;box-shadow:0 2px 4px #000a}
+#rewind{width:54px;height:54px;font-size:20px;background:linear-gradient(180deg,#9b86ff,#5b3fd6);
+  box-shadow:0 5px 0 #37298f,0 12px 24px #5b3fd655,inset 0 2px 2px #ffffff44}
+#nope{width:76px;height:76px;font-size:32px;background:linear-gradient(180deg,#ff7aa2,#e63e73);
+  box-shadow:0 7px 0 var(--pink-d),0 14px 30px #ff5c8a44,inset 0 2px 3px #ffffff55}
+#like{width:76px;height:76px;font-size:34px;background:linear-gradient(180deg,#43f0d3,#14b397);color:#04211c;
+  box-shadow:0 7px 0 var(--teal-d),0 14px 30px #2fe6c855,inset 0 2px 3px #ffffff77}
+#msg{width:54px;height:54px;font-size:20px;background:linear-gradient(180deg,#4fd0ff,#1a7fd4);
+  box-shadow:0 5px 0 #0e4f8a,0 12px 24px #1a7fd455,inset 0 2px 2px #ffffff44}
+
+/* нижняя 3D-панель */
+nav{padding:10px 12px calc(12px + env(safe-area-inset-bottom));position:relative;z-index:2}
+.dock{display:flex;justify-content:space-around;align-items:center;border-radius:24px;padding:8px 6px;
+  background:linear-gradient(180deg,#242044,#151126);border:1px solid #ffffff16;
+  box-shadow:0 12px 30px #000d,inset 0 1px 0 #ffffff22}
+.ditem{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);
+  cursor:pointer;position:relative;padding:7px 9px;border-radius:16px;font-weight:600;
+  transition:transform .12s,color .12s,background .12s}
+.ditem:active{transform:translateY(2px) scale(.95)}
+.ditem .ico{font-size:22px;filter:drop-shadow(0 3px 3px #000a);transition:transform .15s}
+.ditem.on{color:#fff;background:linear-gradient(180deg,#3a2b74,#241b48);
+  box-shadow:0 4px 0 #120e26,0 8px 18px #000a,inset 0 1px 0 #ffffff2e}
+.ditem.on .ico{transform:translateY(-2px) scale(1.15);filter:drop-shadow(0 3px 6px #b28bffaa)}
+.dock b{position:absolute;top:0;right:2px;min-width:18px;height:18px;border-radius:9px;background:#ff5c8a;
+  color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center;box-shadow:0 2px 5px #000b}
+
+#modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;z-index:50}
+#modal .box{background:linear-gradient(180deg,#1d1832,#141024);border:1px solid #2ee6c844;border-radius:22px;
+  padding:20px;width:90%;max-width:340px;box-shadow:0 20px 50px #000e,inset 0 1px 0 #ffffff1f;
+  animation:pop .25s cubic-bezier(.2,.9,.3,1.35)}
+@keyframes pop{from{transform:scale(.8) translateY(24px);opacity:0}}
 #modal h3{margin-bottom:12px;font-size:17px}
-#modal textarea{width:100%;height:90px;background:#0f0c1c;border:1px solid #ffffff22;border-radius:12px;color:#fff;padding:10px;resize:none}
-#modal .row{display:flex;gap:10px;margin-top:12px}
-#modal .row button{flex:1;padding:10px;border:none;border-radius:12px;font-weight:700;cursor:pointer}
-#mSend{background:var(--teal);color:#04211c}
-#mClose{background:#241f38;color:#c9c5e0}
-#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--teal);color:#04211c;
-  font-weight:700;padding:10px 18px;border-radius:999px;opacity:0;transition:opacity .3s;z-index:60;pointer-events:none}
-@media (max-height:700px){#stack{max-height:500px}.name{font-size:24px}}
+#modal h3 span{color:var(--teal)}
+#modal textarea{width:100%;height:90px;background:#0f0c1c;border:1px solid #ffffff22;border-radius:12px;
+  color:#fff;padding:10px;resize:none;font-family:inherit}
+#modal .row{display:flex;gap:10px;margin-top:14px}
+#modal .row button{flex:1;padding:12px;border:none;border-radius:14px;font-weight:800;cursor:pointer;font-size:15px;
+  transition:transform .1s,box-shadow .1s}
+#modal .row button:active{transform:translateY(3px)}
+#mSend{background:linear-gradient(180deg,#43f0d3,#17b89b);color:#04211c;
+  box-shadow:0 4px 0 var(--teal-d),0 10px 20px #2fe6c833,inset 0 1px 0 #ffffff66}
+#mSend:active{box-shadow:0 1px 0 var(--teal-d),0 4px 10px #2fe6c833,inset 0 1px 0 #ffffff66}
+#mClose{background:linear-gradient(180deg,#2b2547,#1c1730);color:#c9c5e0;
+  box-shadow:0 4px 0 #0c0a18,0 8px 16px #0008,inset 0 1px 0 #ffffff1f}
+#mClose:active{box-shadow:0 1px 0 #0c0a18,0 4px 8px #0008,inset 0 1px 0 #ffffff1f}
+
+#toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:linear-gradient(180deg,#43f0d3,#17b89b);
+  color:#04211c;font-weight:800;padding:10px 18px;border-radius:999px;opacity:0;transition:opacity .3s;
+  z-index:60;pointer-events:none;box-shadow:0 6px 18px #000b}
+@media (max-height:700px){#stage{max-height:490px}.name{font-size:24px}}
 </style>
 </head>
 <body>
 
-<header><button class="close">✕ Закрыть</button><div class="logo">💜 DOUBLEMID</div></header>
-<div class="tabs"><button>💜 НЯШКИ</button><button class="active">🎮 ТИММЕЙТЫ</button></div>
+<div class="deco" style="top:12%;left:6%">🎮</div>
+<div class="deco" style="top:38%;right:5%">💜</div>
+<div class="deco" style="bottom:30%;left:8%">🕹️</div>
+
+<header>
+  <button class="close">✕ Закрыть</button>
+  <div class="logo"><b>LFG</b><small>LOOKING FOR GROUP</small></div>
+</header>
+
+<div class="tabs">
+  <button id="tab1">💜 НЯШКИ</button>
+  <button id="tab2" class="active">🎮 ТИММЕЙТЫ</button>
+</div>
 
 <main>
-  <div id="stack"></div>
+  <div id="stage"></div>
   <div class="actions">
-    <button class="btn-sm" id="rewind">↩<span class="dot">3</span></button>
-    <button class="btn-lg" id="nope">✕</button>
-    <button class="btn-lg" id="like">✔</button>
-    <button class="btn-sm" id="msg">✉<span class="dot">1</span></button>
+    <button class="abtn" id="rewind">↩<span class="dot">3</span></button>
+    <button class="abtn" id="nope">✕</button>
+    <button class="abtn" id="like">✔</button>
+    <button class="abtn" id="msg">✉<span class="dot">1</span></button>
   </div>
 </main>
 
-<nav>
-  <div class="on">▣<b>Поиск</b></div><div>♡ Лайки</div><div>👥 Пати<b>5</b></div><div>💬 Чаты</div><div>👤 Профиль</div>
-</nav>
-
-<div id="modal" hidden><div class="box">
-  <h3>Сообщение для <span id="mName"></span></h3>
-  <textarea placeholder="Привет! Го катку?"></textarea>
-  <div class="row"><button id="mSend">Отправить</button><button id="mClose">Закрыть</button></div>
-</div></div>
-<div id="toast">Отправлено ✓</div>
-
-<script>
-const P=[
- {n:'sqrtLY',a:21,g:'♂',c:'Москва',ic:'🖥️ 🤘 🍺',tag:'новенький',common:'1 общая игра',g1:'CS2',lvl:'7 LVL',plus:'+7',
-  ph:[['linear-gradient(160deg,#23202e,#4a3560)','🎧'],['linear-gradient(160deg,#1d2e2c,#0e1618)','🎮']]},
- {n:'NeonFox',a:19,g:'♀',c:'Минск',ic:'🎨 🎮 🌙',tag:'тиммейт',common:'3 общие игры',g1:'Dota 2',lvl:'12 LVL',plus:'+4',
-  ph:[['linear-gradient(160deg,#3a1e4d,#7a2f5a)','🦊'],['linear-gradient(160deg,#12233d,#1e4a4a)','🕹️']]},
- {n:'ShadowPeek',a:23,g:'♂',c:'Гродно',ic:'⚽ 🎧 🍕',tag:'новенький',common:'2 общие игры',g1:'Valorant',lvl:'9 LVL',plus:'+2',
-  ph:[['linear-gradient(160deg,#20303a,#0d1420)','🐺'],['linear-gradient(160deg,#2e1e3a,#150d20)','👾']]}
-];
-const stack=document.getElementById('stack');
-let shown=0,hist=[];
-const top=()=>stack.firstElementChild;
-
-function makeCard(p){
-  const el=document.createElement('div');el.className='card';el.dataset.name=p.n;
-  el.innerHTML=`
-   <div class="photo" style="background:${p.ph[0][0]}">${p.ph[0][1]}</div>
-   <div class="bars">${p.ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>
-   <div class="chip-game">🎮 ${p.common}</div>
-   <div class="stamp s-like">ЛАЙК</div><div class="stamp s-nope">ДИЗЛАЙК</div>
-   <div class="info"><span class="tag">${p.tag}</span>
-     <div class="name">${p.n}, ${p.a} <span>${p.g}</span></div>
-     <div class="meta">${p.c} <b>|</b> ${p.ic}</div>
-     <div class="game-row"><div class="game">🎯 ${p.g1} <small>| ${p.lvl}</small></div><div class="plus">${p.plus}</div></div>
-   </div>`;
-  const photo=el.querySelector('.photo'),bars=[...el.querySelectorAll('.bars i')];let pi=0;
-  photo.addEventListener('click',()=>{pi=(pi+1)%p.ph.length;
-    photo.style.background=p.ph[pi][0];photo.textContent=p.ph[pi][1];
-    bars.forEach((b,i)=>b.classList.toggle('on',i===pi));});
-  drag(el);return el;
-}
-function refill(){while(stack.children.length<3&&shown<P.length)stack.append(makeCard(P[shown++]))}
-
-function drag(el){
-  let sx,sy,dx,dy,on=false;
-  const like=el.querySelector('.s-like'),nope=el.querySelector('.s-nope');
-  el.addEventListener('pointerdown',e=>{if(top()!==el)return;on=true;sx=e.clientX;sy=e.clientY;dx=dy=0;
-    el.setPointerCapture(e.pointerId);el.style.transition='none'});
-  el.addEventListener('pointermove',e=>{if(!on)return;dx=e.clientX-sx;dy=e.clientY-sy;
-    el.style.transform=`translate(${dx}px,${dy}px) rotate(${dx/18}deg)`;
-    like.style.opacity=dx>60?1:0;nope.style.opacity=dx<-60?1:0});
-  const up=()=>{if(!on)return;on=false;
-    el.style.transition='transform .35s cubic-bezier(.2,.8,.3,1)';
-    if(dx>100)fly(el,1);else if(dx<-100)fly(el,-1);
-    else{el.style.transform='';like.style.opacity=0;nope.style.opacity=0}};
-  el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
-}
-function fly(el,dir){
-  el.style.transition='transform .4s ease-in,opacity .4s';
-  el.style.transform=`translate(${dir*640}px,-90px) rotate(${dir*32}deg)`;el.style.opacity='0';
-  el.dataset.gone='1';hist.push(el);
-  setTimeout(()=>{if(el.dataset.gone==='1')el.remove();refill()},380);
-}
-
-document.getElementById('like').onclick=()=>{const e=top();if(e)fly(e,1)};
-document.getElementById('nope').onclick=()=>{const e=top();if(e)fly(e,-1)};
-document.getElementById('rewind').onclick=()=>{const el=hist.pop();if(!el)return;
-  if(stack.children.length>=3&&shown>=P.length)stack.lastElementChild.remove();
-  el.dataset.gone='0';el.style.transition='none';el.style.transform='';el.style.opacity='1';
-  el.querySelector('.s-like').style.opacity=0;el.querySelector('.s-nope').style.opacity=0;
-  stack.prepend(el)};
-const modal=document.getElementById('modal');
-document.getElementById('msg').onclick=()=>{const e=top();document.getElementById('mName').textContent=e?e.dataset.name:'';
-  modal.hidden=false};
-document.getElementById('mClose').onclick=()=>modal.hidden=true;
-document.getElementById('mSend').onclick=()=>{modal.hidden=true;const t=document.getElementById('toast');
-  t.style.opacity=1;setTimeout(()=>t.style.opacity=0,1500)};
-
-refill();
-</script>
-</body>
-</html>
+<nav><div class="dock">
+  <div
