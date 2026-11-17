@@ -16,33 +16,27 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
-            /* Сложный анимированный фон */
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.15), transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(0, 255, 170, 0.1), transparent 30%);
-            background-size: 200% 200%;
-            animation: bgMove 10s infinite alternate;
+                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 255, 170, 0.1), transparent 25%);
         }
 
-        @keyframes bgMove {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-
-        /* --- ОБЩИЕ СТИЛИ И АНИМАЦИИ --- */
+        /* --- АНИМАЦИЯ ЭКРАНОВ --- */
         .screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
-            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease;
             z-index: 1;
         }
+        
+        /* Скрытый экран уезжает вправо и исчезает */
         .screen.hidden {
-            transform: translateX(100%);
             opacity: 0;
+            transform: translateX(20%);
             pointer-events: none;
+            z-index: 0;
         }
 
         /* --- СТАРТОВЫЙ ЭКРАН --- */
@@ -51,22 +45,15 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            z-index: 10;
         }
         .logo-main {
             font-size: 64px;
             font-weight: 900;
             letter-spacing: 4px;
             color: #fff;
-            margin-bottom: 5px;
             text-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
-            animation: pulse 3s infinite alternate;
+            margin-bottom: 5px;
         }
-        @keyframes pulse { 
-            from { text-shadow: 0 0 20px rgba(139,92,246,0.3); transform: scale(1); } 
-            to { text-shadow: 0 0 60px rgba(139,92,246,0.8); transform: scale(1.02); } 
-        }
-        
         .logo-sub {
             font-size: 12px;
             letter-spacing: 6px;
@@ -74,15 +61,15 @@
             text-transform: uppercase;
             margin-bottom: 30px;
         }
-
         .start-desc {
             color: #a1a1aa;
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 40px;
-            max-width: 300px;
+            max-width: 320px;
         }
         
+        /* 3D Кнопка */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9);
             color: white;
@@ -95,16 +82,9 @@
             max-width: 320px;
             cursor: pointer;
             box-shadow: 0 8px 0 #4c1d95, 0 15px 30px rgba(0,0,0,0.6);
-            transition: transform 0.15s, box-shadow 0.15s;
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.1s, box-shadow 0.1s;
+            user-select: none;
         }
-        .start-btn::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-        .start-btn:hover::after { left: 100%; }
         .start-btn:active {
             transform: translateY(6px);
             box-shadow: 0 2px 0 #4c1d95, 0 5px 10px rgba(0,0,0,0.6);
@@ -117,7 +97,6 @@
             align-items: center;
             padding: 15px 20px;
             flex-shrink: 0;
-            z-index: 5;
         }
         .back-btn {
             background: rgba(255,255,255,0.05);
@@ -128,63 +107,39 @@
             color: #a1a1aa;
             font-size: 22px;
             cursor: pointer;
-            transition: 0.2s;
-            backdrop-filter: blur(5px);
         }
-        .back-btn:active { background: rgba(255,255,255,0.15); transform: scale(0.9); }
+        .back-btn:active { background: rgba(255,255,255,0.15); }
         
-        .progress-container { flex: 1; margin: 0 15px; height: 8px; background: #27272a; border-radius: 4px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 0%; transition: width 0.5s ease; border-radius: 4px; box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
+        .progress-container { flex: 1; margin: 0 15px; height: 8px; background: #27272a; border-radius: 4px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 33%; transition: width 0.4s ease; border-radius: 4px; }
         .progress-text { font-size: 14px; color: #71717a; font-weight: 800; }
 
-        /* --- ФОРМА АНКЕТЫ --- */
+        /* --- КОНТЕНТ АНКЕТЫ --- */
         .form-container {
             flex: 1;
             padding: 10px 20px 20px 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .form-container.fade-out { opacity: 0; transform: translateY(15px); }
-        .form-container.fade-in { opacity: 1; transform: translateY(0); }
 
-        .step-title { font-size: 30px; font-weight: 800; margin-bottom: 10px; color: #fff; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .step-title { font-size: 30px; font-weight: 800; margin-bottom: 10px; color: #fff; line-height: 1.2; }
         .step-desc { font-size: 15px; color: #a1a1aa; margin-bottom: 30px; line-height: 1.5; }
 
         /* Карточки правил */
         .rule-card {
-            background: rgba(24, 24, 27, 0.7);
+            background: rgba(24, 24, 27, 0.8);
             border: 1px solid rgba(255,255,255,0.05);
             padding: 20px;
             border-radius: 16px;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .rule-card h3 { color: #8b5cf6; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .rule-card h3 { color: #8b5cf6; font-size: 16px; margin-bottom: 12px; }
         .rule-list { list-style: none; padding: 0; }
-        .rule-list li { font-size: 14px; color: #d4d4d8; margin-bottom: 12px; padding-left: 24px; position: relative; }
+        .rule-list li { font-size: 14px; color: #d4d4d8; margin-bottom: 12px; padding-left: 20px; position: relative; }
         .rule-list li::before { content: '✦'; color: #8b5cf6; position: absolute; left: 0; font-size: 14px; }
 
-        /* Поля ввода */
-        .input-group { margin-bottom: 25px; }
-        .input-label { font-size: 12px; color: #71717a; text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 800; letter-spacing: 1.5px; }
-        .text-input {
-            width: 100%;
-            background: rgba(24, 24, 27, 0.8);
-            border: 1px solid #3f3f46;
-            color: #fff;
-            padding: 18px;
-            border-radius: 14px;
-            font-size: 16px;
-            outline: none;
-            transition: all 0.3s;
-            backdrop-filter: blur(5px);
-        }
-        .text-input:focus { border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); background: rgba(24, 24, 27, 1); }
-
-        /* Чекбоксы */
+        /* Чекбокс */
         .checkbox-card {
             display: flex;
             align-items: center;
@@ -194,24 +149,37 @@
             padding: 20px;
             border-radius: 16px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .checkbox-card:active { background: rgba(39, 39, 42, 0.8); transform: scale(0.98); }
-        .checkbox-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1); box-shadow: 0 0 20px rgba(139, 92, 246, 0.15); }
+        .checkbox-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
         .checkbox-box {
             width: 28px; height: 28px;
             border-radius: 8px;
             border: 2px solid #52525b;
             display: flex; justify-content: center; align-items: center;
-            flex-shrink: 0;
-            transition: all 0.3s;
+            transition: 0.2s;
         }
-        .checkbox-card.active .checkbox-box { background: #8b5cf6; border-color: #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); }
+        .checkbox-card.active .checkbox-box { background: #8b5cf6; border-color: #8b5cf6; }
         .checkbox-box svg { width: 18px; height: 18px; fill: white; display: none; }
         .checkbox-card.active .checkbox-box svg { display: block; }
         .checkbox-text { font-size: 16px; color: #e4e4e7; font-weight: 600; }
 
-        /* Сетка игр */
+        /* Поля ввода */
+        .input-group { margin-bottom: 25px; }
+        .input-label { font-size: 12px; color: #71717a; text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 800; letter-spacing: 1px; }
+        .text-input {
+            width: 100%;
+            background: rgba(24, 24, 27, 0.8);
+            border: 1px solid #3f3f46;
+            color: #fff;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+        }
+        .text-input:focus { border-color: #8b5cf6; }
+
+        /* Игры */
         .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .game-card {
             background: rgba(24, 24, 27, 0.8);
@@ -223,19 +191,16 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
+            transition: 0.2s;
         }
-        .game-card:active { transform: scale(0.95); }
-        .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); transform: translateY(-2px); }
-        .game-icon { width: 44px; height: 44px; background: #27272a; border-radius: 12px; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
-        .game-card.active .game-icon { background: #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.6); }
+        .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
+        .game-icon { width: 44px; height: 44px; background: #27272a; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
+        .game-card.active .game-icon { background: #8b5cf6; }
         .game-icon svg { width: 24px; height: 24px; fill: #a1a1aa; }
         .game-card.active .game-icon svg { fill: white; }
-        .game-name { font-size: 14px; font-weight: 700; color: #e4e4e7; text-align: center; }
+        .game-name { font-size: 14px; font-weight: 700; color: #e4e4e7; }
 
-        /* Ползунок ранга */
+        /* Ползунок */
         .rank-slider-container {
             display: none;
             background: rgba(24, 24, 27, 0.9);
@@ -243,28 +208,22 @@
             padding: 20px;
             border-radius: 16px;
             margin-bottom: 16px;
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.2);
-            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         .rank-slider-container.active { display: block; }
-        .rank-title { font-size: 14px; color: #a1a1aa; margin-bottom: 15px; text-align: center; font-weight: 600; }
+        .rank-title { font-size: 14px; color: #a1a1aa; margin-bottom: 15px; text-align: center; }
         .rank-value { font-size: 24px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 15px; text-shadow: 0 0 15px rgba(139, 92, 246, 0.8); }
-        
-        .range-slider { -webkit-appearance: none; width: 100%; height: 10px; background: #27272a; border-radius: 5px; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: #fff; border-radius: 50%; border: 4px solid #8b5cf6; cursor: pointer; box-shadow: 0 0 15px rgba(139, 92, 246, 0.8); transition: transform 0.1s; }
-        .range-slider::-webkit-slider-thumb:active { transform: scale(1.1); }
+        .range-slider { -webkit-appearance: none; width: 100%; height: 10px; background: #27272a; border-radius: 5px; outline: none; }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; background: #fff; border-radius: 50%; border: 4px solid #8b5cf6; cursor: pointer; }
 
-        /* Кнопки навигации */
+        /* Низ формы */
         .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; }
-        .btn { border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.15s, box-shadow 0.15s; }
+        .btn { border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s, box-shadow 0.1s; user-select: none; }
         .btn:active { transform: translateY(4px); }
-        .btn-primary { background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; box-shadow: 0 6px 0 #4c1d95, 0 10px 20px rgba(0,0,0,0.4); padding: 20px; }
+        .btn-primary { background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; box-shadow: 0 6px 0 #4c1d95; padding: 20px; }
         .btn-primary:active { box-shadow: 0 1px 0 #4c1d95; }
-        .btn-secondary { background: rgba(24, 24, 27, 0.8); color: #e4e4e7; border: 1px solid #3f3f46; box-shadow: 0 6px 0 #09090b, 0 10px 20px rgba(0,0,0,0.4); padding: 20px; backdrop-filter: blur(5px); }
+        .btn-secondary { background: rgba(24, 24, 27, 0.8); color: #e4e4e7; border: 1px solid #3f3f46; box-shadow: 0 6px 0 #09090b; padding: 20px; }
         .btn-secondary:active { box-shadow: 0 1px 0 #09090b; }
         .btn-half { flex: 1; }
-        
     </style>
 </head>
 <body>
@@ -276,7 +235,7 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <button class="start-btn" onclick="startRegistration()">Создать анкету</button>
+        <button class="start-btn" onclick="goToForm()">Создать анкету</button>
     </div>
 
     <!-- ЭКРАН АНКЕТЫ -->
@@ -284,10 +243,10 @@
         <div class="header">
             <button class="back-btn" onclick="prevStep()">←</button>
             <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-            <span class="progress-text" id="progressText">1/4</span>
+            <span class="progress-text" id="progressText">1/3</span>
         </div>
         
-        <div class="form-container fade-in" id="formContainer">
+        <div class="form-container" id="formContainer">
             <!-- Сюда рендерятся шаги -->
         </div>
 
@@ -297,131 +256,82 @@
     </div>
 
     <script>
-        // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
         const tg = window.Telegram.WebApp;
         if (tg) tg.expand();
 
         let currentStep = 1;
-        const totalSteps = 4;
-        const formContainer = document.getElementById('formContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const bottomActions = document.getElementById('bottomActions');
+        const totalSteps = 3;
 
-        // === НАВИГАЦИЯ ===
-        function startRegistration() {
+        // ПЕРЕХОД НА ФОРМУ
+        function goToForm() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('regScreen').classList.remove('hidden');
             currentStep = 1;
-            updateProgress();
             renderStep();
         }
 
+        // НАВИГАЦИЯ ДАЛЕЕ/НАЗАД
         function nextStep() {
             if (currentStep < totalSteps) {
-                // Плавный переход
-                formContainer.classList.remove('fade-in');
-                formContainer.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    currentStep++;
-                    updateProgress();
-                    renderStep();
-                    
-                    // Возвращаем прозрачность
-                    formContainer.classList.remove('fade-out');
-                    formContainer.classList.add('fade-in');
-                }, 300); // 300мс совпадает с CSS transition
+                currentStep++;
+                renderStep();
             } else {
-                // Финал
-                if (tg) tg.showAlert("Анкета успешно создана! Добро пожаловать в LFG.");
-                document.getElementById('regScreen').classList.add('hidden');
-                document.getElementById('startScreen').classList.remove('hidden');
+                if (tg) tg.showAlert("Анкета создана!");
+                location.reload();
             }
         }
 
         function prevStep() {
             if (currentStep > 1) {
-                formContainer.classList.remove('fade-in');
-                formContainer.classList.add('fade-out');
-                
-                setTimeout(() => {
-                    currentStep--;
-                    updateProgress();
-                    renderStep();
-                    
-                    formContainer.classList.remove('fade-out');
-                    formContainer.classList.add('fade-in');
-                }, 300);
+                currentStep--;
+                renderStep();
             } else {
                 document.getElementById('regScreen').classList.add('hidden');
                 document.getElementById('startScreen').classList.remove('hidden');
             }
         }
 
-        function updateProgress() {
+        // РЕНДЕР ШАГОВ
+        function renderStep() {
+            const formContainer = document.getElementById('formContainer');
+            const bottomActions = document.getElementById('bottomActions');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            // Обновляем прогресс
             progressBar.style.width = `${(currentStep / totalSteps) * 100}%`;
             progressText.innerText = `${currentStep}/${totalSteps}`;
-        }
 
-        // === РЕНДЕР ШАГОВ ===
-        function renderStep() {
             formContainer.innerHTML = '';
             bottomActions.innerHTML = '';
 
-            // ШАГ 1: ПРАВИЛА
+            // ШАГ 1
             if (currentStep === 1) {
                 formContainer.innerHTML = `
                     <div class="step-title">Правила проекта</div>
-                    <div class="step-desc">Пожалуйста, ознакомься с правилами нашего сообщества перед созданием анкеты. Это важно для комфортного общения.</div>
-                    
+                    <div class="step-desc">Ознакомься с правилами перед созданием анкеты.</div>
                     <div class="rule-card">
                         <h3>1. Уважение</h3>
                         <ul class="rule-list">
-                            <li>Общайтесь вежливо, без оскорблений и токсичности.</li>
-                            <li>Запрещены любые проявления дискриминации.</li>
+                            <li>Общайтесь вежливо, без токсичности.</li>
+                            <li>Запрещена дискриминация.</li>
                         </ul>
                     </div>
-                    
-                    <div class="rule-card">
-                        <h3>2. Честность</h3>
-                        <ul class="rule-list">
-                            <li>Указывайте только достоверную информацию о себе и своем ранге.</li>
-                            <li>Запрещены фейковые анкеты и спам.</li>
-                        </ul>
-                    </div>
-
-                    <div class="checkbox-card" id="rulesCheckbox" onclick="this.classList.toggle('active')">
+                    <div class="checkbox-card" onclick="this.classList.toggle('active')">
                         <div class="checkbox-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
-                        <div class="checkbox-text">Я согласен с правилами проекта</div>
+                        <div class="checkbox-text">Я согласен с правилами</div>
                     </div>
                 `;
                 bottomActions.innerHTML = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
             } 
-            
-            // ШАГ 2: ДАННЫЕ
+            // ШАГ 2
             else if (currentStep === 2) {
                 formContainer.innerHTML = `
-                    <div class="step-title">Создание анкеты</div>
-                    <div class="step-desc">Расскажи о себе основное. Эта информация будет видна другим игрокам в твоей карточке.</div>
-                    
+                    <div class="step-title">Твои данные</div>
+                    <div class="step-desc">Как тебя будут видеть другие игроки.</div>
                     <div class="input-group">
-                        <label class="input-label">Твой никнейм</label>
-                        <input type="text" class="text-input" placeholder="Например: Sn1per" value="">
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Дата рождения</label>
-                        <input type="date" class="text-input">
-                        <div style="font-size: 12px; color: #52525b; margin-top: 8px;">В анкете будет отображаться только возраст.</div>
-                    </div>
-
-                    <div class="input-group">
-                        <label class="input-label">Пол</label>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn btn-secondary" style="flex: 1; padding: 12px;">Парень</button>
-                            <button class="btn btn-secondary" style="flex: 1; padding: 12px;">Девушка</button>
-                        </div>
+                        <label class="input-label">Никнейм</label>
+                        <input type="text" class="text-input" placeholder="Введи ник">
                     </div>
                 `;
                 bottomActions.innerHTML = `
@@ -429,13 +339,41 @@
                     <button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>
                 `;
             }
-            
-            // ШАГ 3: ИГРЫ
+            // ШАГ 3
             else if (currentStep === 3) {
                 formContainer.innerHTML = `
-                    <div class="step-title">Во что играешь?</div>
-                    <div class="step-desc">Выбери одну или несколько игр. Для некоторых игр нужно будет указать свой ранг.</div>
-                    
+                    <div class="step-title">Выбери игру</div>
+                    <div class="step-desc">В какой игре ищешь напарников?</div>
                     <div class="games-grid">
                         <div class="game-card" onclick="toggleGame(this, 'cs2')">
-                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17
+                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+                            <div class="game-name">CS2</div>
+                        </div>
+                        <div class="game-card" onclick="toggleGame(this, 'dota')">
+                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                            <div class="game-name">Dota 2</div>
+                        </div>
+                    </div>
+                    <div class="rank-slider-container" id="cs2Rank">
+                        <div class="rank-title">Твой ранг в CS2:</div>
+                        <div class="rank-value" id="cs2Value">Уровень 1</div>
+                        <input type="range" class="range-slider" min="1" max="10" value="1" oninput="document.getElementById('cs2Value').innerText = 'Уровень ' + this.value">
+                    </div>
+                `;
+                bottomActions.innerHTML = `
+                    <button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>
+                    <button class="btn btn-primary btn-half" onclick="nextStep()">Завершить</button>
+                `;
+            }
+        }
+
+        // ЛОГИКА ВЫБОРА ИГРЫ
+        function toggleGame(el, gameId) {
+            el.classList.toggle('active');
+            if (gameId === 'cs2') {
+                document.getElementById('cs2Rank').classList.toggle('active', el.classList.contains('active'));
+            }
+        }
+    </script>
+</body>
+</html>
