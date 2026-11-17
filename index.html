@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #09090b; /* Очень темный фон */
+            background-color: #09090b;
             color: #e4e4e7;
             height: 100vh;
             height: 100dvh;
@@ -18,7 +18,7 @@
             overflow: hidden;
         }
 
-        /* --- ОБЩИЕ СТИЛИ --- */
+        /* --- ОБЩИЕ СТИЛИ И АНИМАЦИИ --- */
         .screen {
             position: absolute;
             top: 0;
@@ -28,7 +28,7 @@
             display: flex;
             flex-direction: column;
             background: #09090b;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
             z-index: 1;
         }
         .screen.hidden {
@@ -37,21 +37,40 @@
             pointer-events: none;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            flex-shrink: 0;
-        }
-        .back-btn {
-            background: none;
+        /* 3D Кнопки */
+        .btn {
             border: none;
-            color: #a1a1aa;
-            font-size: 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.1s, box-shadow 0.1s;
+            position: relative;
+            user-select: none;
         }
-        .progress-text { font-size: 14px; color: #52525b; font-weight: 600; }
+        
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(180deg, #8b5cf6, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 0 #5b21b6, 0 5px 10px rgba(0,0,0,0.3);
+            padding: 16px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(180deg, #27272a, #18181b);
+            color: #e4e4e7;
+            border: 1px solid #3f3f46;
+            box-shadow: 0 4px 0 #09090b, 0 5px 10px rgba(0,0,0,0.3);
+            padding: 16px;
+        }
 
         /* --- СТАРТОВЫЙ ЭКРАН --- */
         .start-screen {
@@ -62,210 +81,221 @@
             z-index: 10;
         }
         .logo-main {
-            font-size: 40px;
+            font-size: 48px;
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: #fff;
             margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
         .logo-sub {
             font-size: 12px;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
             color: #71717a;
             text-transform: uppercase;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
-        .start-btn {
-            background: #27272a;
-            color: #fff;
-            border: 1px solid #3f3f46;
-            padding: 18px 40px;
-            border-radius: 16px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-            transition: background 0.2s;
-        }
-        .start-btn:active { background: #3f3f46; }
+        
+        .start-btn-wrapper { width: 100%; max-width: 320px; }
+        .start-btn { width: 100%; font-size: 18px; padding: 20px; }
 
-        /* --- ЭКРАН НАСТРОЕК (Шестеренка) --- */
+        /* --- КНОПКА НАСТРОЕК --- */
         .settings-btn {
             position: absolute;
             right: 20px;
-            top: 15px;
-            background: #18181b;
-            border: 1px solid #27272a;
+            top: 20px;
+            background: linear-gradient(180deg, #27272a, #18181b);
+            border: 1px solid #3f3f46;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 15;
+            box-shadow: 0 3px 0 #09090b;
+            transition: transform 0.1s;
         }
-        .settings-btn svg { width: 20px; height: 20px; fill: #a1a1aa; }
+        .settings-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #09090b; }
+        .settings-btn svg { width: 22px; height: 22px; fill: #a1a1aa; }
 
-        /* --- ЭКРАН АНКЕТЫ (ФОРМА) --- */
+        /* --- ШАПКА АНКЕТЫ --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            flex-shrink: 0;
+            background: #09090b;
+            z-index: 5;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #a1a1aa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .progress-text { font-size: 14px; color: #52525b; font-weight: 600; }
+
+        /* --- ФОРМА АНКЕТЫ --- */
         .form-container {
             flex: 1;
-            padding: 20px;
+            padding: 10px 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
-        .step-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; color: #fff; }
+        .step-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; color: #fff; line-height: 1.2; }
         .step-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 25px; line-height: 1.4; }
 
-        /* Поля ввода */
         .input-group { margin-bottom: 20px; }
-        .input-label { font-size: 12px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 600; letter-spacing: 1px; }
+        .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 700; letter-spacing: 1px; }
         .text-input {
             width: 100%;
             background: #18181b;
             border: 1px solid #27272a;
             color: #fff;
-            padding: 15px;
+            padding: 16px;
             border-radius: 12px;
             font-size: 16px;
             outline: none;
+            transition: border-color 0.2s;
         }
-        .text-input:focus { border-color: #52525b; }
+        .text-input:focus { border-color: #8b5cf6; }
 
-        /* Чекбоксы */
+        /* Чекбоксы 3D */
         .checkbox-card {
             display: flex;
             align-items: flex-start;
             gap: 15px;
             background: #18181b;
             border: 1px solid #27272a;
-            padding: 15px;
+            padding: 16px;
             border-radius: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+        .checkbox-card:active { background: #1f1f23; }
         .checkbox-box {
             width: 24px; height: 24px;
             border-radius: 6px;
             border: 2px solid #3f3f46;
             display: flex; justify-content: center; align-items: center;
             flex-shrink: 0;
-            margin-top: 2px;
+            transition: 0.2s;
         }
         .checkbox-card.active .checkbox-box {
-            background: #7c3aed; /* Приглушенный фиолетовый */
-            border-color: #7c3aed;
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
         }
         .checkbox-box svg { width: 14px; height: 14px; fill: white; display: none; }
         .checkbox-card.active .checkbox-box svg { display: block; }
         .checkbox-text { font-size: 14px; color: #d4d4d8; line-height: 1.4; }
 
-        /* Выбор игр (Сетка) */
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        /* Выбор игр (Сетка 3D) */
+        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .game-card {
-            background: #18181b;
-            border: 1px solid #27272a;
-            border-radius: 12px;
-            padding: 15px;
+            background: linear-gradient(180deg, #27272a, #18181b);
+            border: 1px solid #3f3f46;
+            border-radius: 16px;
+            padding: 16px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 0 4px 0 #09090b, 0 5px 10px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .game-card:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #09090b;
         }
         .game-card.active {
-            border-color: #7c3aed;
-            background: rgba(124, 58, 237, 0.1);
+            border-color: #8b5cf6;
+            background: linear-gradient(180deg, #2e1065, #1e1b4b);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3), 0 4px 0 #09090b;
         }
         .game-icon {
-            width: 32px; height: 32px;
-            background: #27272a;
-            border-radius: 8px;
+            width: 40px; height: 40px;
+            background: #3f3f46;
+            border-radius: 10px;
             display: flex; justify-content: center; align-items: center;
         }
-        .game-icon svg { width: 20px; height: 20px; fill: #a1a1aa; }
-        .game-name { font-size: 14px; font-weight: 600; color: #e4e4e7; }
+        .game-card.active .game-icon { background: #8b5cf6; }
+        .game-icon svg { width: 24px; height: 24px; fill: #a1a1aa; }
+        .game-card.active .game-icon svg { fill: white; }
+        .game-name { font-size: 14px; font-weight: 700; color: #e4e4e7; text-align: center; }
 
-        /* Ползунок ранга (появляется при выборе игры) */
+        /* Ползунок ранга (3D) */
         .rank-slider-container {
             display: none;
             background: #18181b;
             border: 1px solid #27272a;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            animation: slideDown 0.3s ease;
         }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .rank-slider-container.active { display: block; }
-        .rank-title { font-size: 14px; color: #a1a1aa; margin-bottom: 10px; }
-        .rank-value { font-size: 18px; font-weight: bold; color: #fff; text-align: center; margin-bottom: 10px; }
+        .rank-title { font-size: 13px; color: #a1a1aa; margin-bottom: 12px; }
+        .rank-value { font-size: 20px; font-weight: 800; color: #8b5cf6; text-align: center; margin-bottom: 15px; }
         .range-slider {
-            -webkit-appearance: none; width: 100%; height: 6px; background: #27272a; border-radius: 3px; outline: none;
+            -webkit-appearance: none; width: 100%; height: 8px; background: #27272a; border-radius: 4px; outline: none;
         }
         .range-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 20px; height: 20px; background: #fff; border-radius: 50%; border: 3px solid #7c3aed;
+            -webkit-appearance: none; width: 24px; height: 24px; background: #fff; border-radius: 50%; border: 4px solid #8b5cf6; box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); cursor: pointer;
         }
 
-        /* Кнопки Далее/Пропустить */
+        /* Низ формы */
         .bottom-actions {
             margin-top: auto;
-            padding-top: 20px;
+            padding: 20px;
+            background: #09090b;
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            flex-shrink: 0;
         }
-        .btn-primary {
-            flex: 1;
-            background: #7c3aed;
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-primary:active { background: #6d28d9; }
-        .btn-secondary {
-            background: #18181b;
-            color: #a1a1aa;
-            border: 1px solid #27272a;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .btn-half { flex: 1; }
 
-        /* --- НАСТРОЙКИ (Шестеренка) --- */
+        /* --- МОДАЛЬНОЕ ОКНО НАСТРОЕК --- */
         .settings-modal {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #09090b;
             z-index: 100;
             transform: translateY(100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
             padding: 20px;
             overflow-y: auto;
         }
         .settings-modal.active { transform: translateY(0); }
-        .settings-header { display: flex; align-items: center; margin-bottom: 20px; font-size: 18px; font-weight: bold; }
-        .settings-group { margin-bottom: 20px; }
-        .settings-title { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
+        .settings-header { display: flex; align-items: center; margin-bottom: 25px; font-size: 20px; font-weight: bold; }
+        .settings-group { margin-bottom: 25px; }
+        .settings-title { font-size: 12px; color: #71717a; text-transform: uppercase; margin-bottom: 12px; font-weight: 700; letter-spacing: 1px; }
         .toggle-row {
             display: flex; justify-content: space-between; align-items: center;
-            background: #18181b; padding: 15px; border-radius: 12px; margin-bottom: 10px;
+            background: #18181b; padding: 16px; border-radius: 16px; margin-bottom: 12px;
+            border: 1px solid #27272a;
         }
         .toggle-switch {
-            position: relative; width: 44px; height: 24px; background: #27272a; border-radius: 12px; cursor: pointer; transition: 0.3s;
+            position: relative; width: 50px; height: 28px; background: #27272a; border-radius: 14px; cursor: pointer; transition: 0.3s;
         }
         .toggle-switch::after {
-            content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;
+            content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: white; border-radius: 50%; transition: 0.3s;
         }
-        .toggle-switch.on { background: #7c3aed; }
-        .toggle-switch.on::after { transform: translateX(20px); }
+        .toggle-switch.on { background: #8b5cf6; }
+        .toggle-switch.on::after { transform: translateX(22px); }
     </style>
 </head>
 <body>
@@ -274,13 +304,17 @@
     <div class="screen start-screen" id="startScreen">
         <div class="logo-main">LFG</div>
         <div class="logo-sub">Looking for group</div>
-        <button class="start-btn" onclick="startRegistration()">Создать анкету</button>
+        
+        <div class="start-btn-wrapper">
+            <button class="btn btn-primary start-btn" onclick="startRegistration()">Создать анкету</button>
+        </div>
+
         <button class="settings-btn" onclick="toggleSettings()">
             <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
         </button>
     </div>
 
-    <!-- ЭКРАН АНКЕТЫ (ШАГ 1) -->
+    <!-- ЭКРАН АНКЕТЫ -->
     <div class="screen hidden" id="regScreen">
         <div class="header">
             <button class="back-btn" onclick="backToStart()">←</button>
@@ -288,18 +322,18 @@
         </div>
         
         <div class="form-container" id="formContainer">
-            <!-- Здесь будут меняться шаги через JS -->
+            <!-- Содержимое шагов генерируется JS -->
         </div>
 
         <div class="bottom-actions" id="bottomActions">
-            <!-- Кнопки будут добавляться через JS -->
+            <!-- Кнопки Назад/Далее -->
         </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК -->
     <div class="settings-modal" id="settingsModal">
         <div class="settings-header">
-            <button class="back-btn" onclick="toggleSettings()" style="margin-right: 10px;">←</button>
+            <button class="back-btn" onclick="toggleSettings()" style="margin-right: 15px;">←</button>
             Настройки поиска
         </div>
 
@@ -312,17 +346,15 @@
 
         <div class="settings-group">
             <div class="settings-title">Что ищу</div>
-            <div class="toggle-row" style="justify-content: center; color: #7c3aed; font-weight: bold; cursor: pointer;">
-                Тиммейтов
-            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">Тиммейтов</button>
         </div>
 
         <div class="settings-group">
             <div class="settings-title">Пол тиммейтов</div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn-secondary" style="flex: 1; padding: 10px; font-size: 14px;">Парней</button>
-                <button class="btn-secondary" style="flex: 1; padding: 10px; font-size: 14px;">Девушек</button>
-                <button class="btn-primary" style="flex: 1; padding: 10px; font-size: 14px;">Не важно</button>
+                <button class="btn btn-secondary" style="flex: 1;">Парней</button>
+                <button class="btn btn-secondary" style="flex: 1;">Девушек</button>
+                <button class="btn btn-primary" style="flex: 1;">Не важно</button>
             </div>
         </div>
 
@@ -331,10 +363,11 @@
             <input type="range" class="range-slider" min="18" max="35" value="25">
         </div>
 
-        <button class="btn-primary" style="margin-top: auto;" onclick="toggleSettings()">Сохранить</button>
+        <button class="btn btn-primary" style="margin-top: auto;" onclick="toggleSettings()">Сохранить</button>
     </div>
 
     <script>
+        // Инициализация Telegram WebApp
         const tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -351,15 +384,16 @@
         const bottomActions = document.getElementById('bottomActions');
 
         function startRegistration() {
+            // Плавный переход
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('regScreen').classList.remove('hidden');
+            currentStep = 1;
             renderStep();
         }
 
         function backToStart() {
             document.getElementById('regScreen').classList.add('hidden');
             document.getElementById('startScreen').classList.remove('hidden');
-            currentStep = 1;
         }
 
         function nextStep() {
@@ -367,8 +401,7 @@
                 currentStep++;
                 renderStep();
             } else {
-                // Завершение
-                alert("Анкета создана! (Имитация)");
+                alert("Анкета успешно создана! (Это демо)");
                 backToStart();
             }
         }
@@ -377,14 +410,20 @@
             if (currentStep > 1) {
                 currentStep--;
                 renderStep();
+            } else {
+                backToStart();
             }
         }
 
-        // --- РЕНДЕР ШАГОВ ---
+        // --- РЕНДЕР ШАГОВ АНКЕТЫ ---
         function renderStep() {
             progressText.innerText = `${currentStep}/${totalSteps}`;
             formContainer.innerHTML = '';
             bottomActions.innerHTML = '';
+
+            // Плавное появление контента
+            formContainer.style.opacity = '0';
+            setTimeout(() => { formContainer.style.opacity = '1'; formContainer.style.transition = 'opacity 0.3s'; }, 50);
 
             if (currentStep === 1) {
                 formContainer.innerHTML = `
@@ -392,14 +431,14 @@
                     <div class="step-desc">Анкеты доступны только совершеннолетним.</div>
                     <div class="checkbox-card" onclick="this.classList.toggle('active')">
                         <div class="checkbox-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
-                        <div class="checkbox-text">Мне исполнилось 18 лет. Обязуюсь общаться уважительно.</div>
+                        <div class="checkbox-text">Мне есть 18 лет. Обязуюсь общаться уважительно.</div>
                     </div>
                     <div class="checkbox-card" onclick="this.classList.toggle('active')">
                         <div class="checkbox-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
-                        <div class="checkbox-text">Я согласен с политикой обработки персональных данных.</div>
+                        <div class="checkbox-text">Я согласен на обработку персональных данных.</div>
                     </div>
                 `;
-                bottomActions.innerHTML = `<button class="btn-primary" onclick="nextStep()">Далее</button>`;
+                bottomActions.innerHTML = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
             } 
             else if (currentStep === 2) {
                 formContainer.innerHTML = `
@@ -415,8 +454,8 @@
                     </div>
                 `;
                 bottomActions.innerHTML = `
-                    <button class="btn-secondary" onclick="prevStep()">Назад</button>
-                    <button class="btn-primary" onclick="nextStep()">Далее</button>
+                    <button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>
+                    <button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>
                 `;
             }
             else if (currentStep === 3) {
@@ -433,34 +472,12 @@
                     </div>
                 `;
                 bottomActions.innerHTML = `
-                    <button class="btn-secondary" onclick="prevStep()">Назад</button>
-                    <button class="btn-primary" onclick="nextStep()">Далее</button>
+                    <button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>
+                    <button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>
                 `;
             }
             else if (currentStep === 4) {
                 formContainer.innerHTML = `
                     <div class="step-title">Во что играешь?</div>
-                    <div class="step-desc">Выбери игры, чтобы найти общие интересы.</div>
-                    <div class="games-grid">
-                        <div class="game-card" onclick="toggleGame(this, 'cs2')">
-                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
-                            <div class="game-name">CS2</div>
-                        </div>
-                        <div class="game-card" onclick="toggleGame(this, 'dota')">
-                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-                            <div class="game-name">Dota 2</div>
-                        </div>
-                        <div class="game-card" onclick="toggleGame(this, 'val')">
-                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/></svg></div>
-                            <div class="game-name">Valorant</div>
-                        </div>
-                        <div class="game-card" onclick="toggleGame(this, 'pubg')">
-                            <div class="game-icon"><svg viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg></div>
-                            <div class="game-name">PUBG</div>
-                        </div>
-                    </div>
-
-                    <!-- Ползунок для CS2 (скрыт по умолчанию) -->
-                    <div class="rank-slider-container" id="cs2Rank">
-                        <div class="rank-title">Твой ранг в CS2 (Faceit):</div>
-                        <div class="rank-value" id="cs2Value
+                    <div class="step-desc">Выбери игры для поиска.</div>
+                    <d
