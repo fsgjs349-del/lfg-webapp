@@ -16,23 +16,46 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 255, 170, 0.08), transparent 25%);
+            position: relative;
         }
+
+        /* Летающие эмодзи на фоне */
+        .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Уведомление (как на iPhone) */
+        .toast {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 59, 48, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .toast.show { top: 20px; }
 
         /* Экраны */
         .screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column;
             transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1;
+            z-index: 1; background: transparent;
         }
         .screen.hidden { opacity: 0; transform: translateX(15%); pointer-events: none; z-index: 0; }
 
         /* Стартовый экран */
-        .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
         .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
         .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
@@ -40,12 +63,12 @@
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 320px; cursor: pointer;
-            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none;
+            box-shadow: 0 8px 0 #4c1d95, 0 15px 30px rgba(0,0,0,0.6); transition: transform 0.1s, box-shadow 0.1s; user-select: none;
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
         /* Шапка */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-shrink: 0; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-shrink: 0; z-index: 5; }
         .back-btn {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
             width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
@@ -53,140 +76,252 @@
         }
         .back-btn:active { background: rgba(255,255,255,0.15); }
         .progress-container { flex: 1; margin: 0 15px; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 20%; transition: width 0.4s; border-radius: 3px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 11%; transition: width 0.4s; border-radius: 3px; }
         .progress-text { font-size: 13px; color: #71717a; font-weight: 800; }
 
         /* Контент */
-        .form-container { flex: 1; padding: 10px 20px; overflow-y: auto; display: flex; flex-direction: column; }
-        .step-title { font-size: 26px; font-weight: 800; margin-bottom: 10px; color: #fff; }
-        .step-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 25px; }
-
-        /* Поля ввода */
-        .input-group { margin-bottom: 20px; }
-        .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 800; }
-        .text-input { width: 100%; background: #18181b; border: 1px solid #3f3f46; color: #fff; padding: 15px; border-radius: 12px; font-size: 15px; outline: none; }
-        .text-input:focus { border-color: #8b5cf6; }
+        .form-container { flex: 1; padding: 10px 20px 20px 20px; overflow-y: auto; display: flex; flex-direction: column; z-index: 2; }
+        .step-title { font-size: 26px; font-weight: 800; margin-bottom: 10px; color: #fff; font-family: 'Georgia', serif; }
+        .step-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 25px; line-height: 1.5; }
 
         /* Чекбокс */
-        .checkbox-card { display: flex; align-items: center; gap: 15px; background: #18181b; border: 1px solid #3f3f46; padding: 20px; border-radius: 16px; cursor: pointer; }
+        .checkbox-card { display: flex; align-items: center; gap: 15px; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; padding: 20px; border-radius: 16px; cursor: pointer; transition: 0.2s; }
         .checkbox-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
-        .checkbox-box { width: 26px; height: 26px; border-radius: 6px; border: 2px solid #52525b; display: flex; justify-content: center; align-items: center; }
+        .checkbox-box { width: 26px; height: 26px; border-radius: 6px; border: 2px solid #52525b; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
         .checkbox-card.active .checkbox-box { background: #8b5cf6; border-color: #8b5cf6; }
         .checkbox-box svg { width: 16px; height: 16px; fill: white; display: none; }
         .checkbox-card.active .checkbox-box svg { display: block; }
         .checkbox-text { font-size: 15px; color: #e4e4e7; font-weight: 600; }
 
-        /* Сетка игр */
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .game-card { background: #18181b; border: 1px solid #27272a; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
-        .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
-        .game-name { font-size: 13px; font-weight: 700; color: #e4e4e7; }
+        /* Поля ввода */
+        .input-group { margin-bottom: 20px; }
+        .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 800; }
+        .text-input { width: 100%; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #fff; padding: 15px; border-radius: 12px; font-size: 15px; outline: none; transition: 0.2s; }
+        .text-input:focus { border-color: #8b5cf6; }
 
-        /* Кнопки */
-        .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; }
-        .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s; }
+        /* Сетка игр */
+        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .game-card { background: rgba(24, 24, 27, 0.8); border: 1px solid #27272a; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; }
+        .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
+        .game-icon { width: 36px; height: 36px; background: #27272a; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .game-card.active .game-icon { background: #8b5cf6; }
+        .game-icon svg { width: 20px; height: 20px; fill: #a1a1aa; }
+        .game-card.active .game-icon svg { fill: white; }
+        .game-name { font-size: 13px; font-weight: 700; color: #e4e4e7; text-align: center; }
+
+        /* Ползунок ранга */
+        .rank-slider-container { display: none; background: rgba(24, 24, 27, 0.9); border: 1px solid #8b5cf6; padding: 15px; border-radius: 14px; margin-bottom: 12px; }
+        .rank-slider-container.active { display: block; }
+        .rank-title { font-size: 13px; color: #a1a1aa; margin-bottom: 10px; text-align: center; }
+        .rank-value { font-size: 18px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 10px; }
+        .range-slider { -webkit-appearance: none; width: 100%; height: 8px; background: #27272a; border-radius: 4px; outline: none; }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #fff; border-radius: 50%; border: 3px solid #8b5cf6; cursor: pointer; }
+
+        /* Страны */
+        .country-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .country-btn { background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #e4e4e7; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.2s; }
+        .country-btn.active { background: #8b5cf6; border-color: #8b5cf6; color: white; }
+
+        /* Пол и Вайбы */
+        .gender-grid { display: flex; gap: 10px; }
+        .gender-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #3f3f46; background: rgba(24, 24, 27, 0.8); color: #e4e4e7; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .gender-btn.male.active { background: #3b82f6; border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); color: white; }
+        .gender-btn.female.active { background: #ec4899; border-color: #ec4899; box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); color: white; }
+
+        .vibes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .vibe-btn { background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; padding: 10px; border-radius: 12px; text-align: center; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        .vibe-btn.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.2); color: white; }
+
+        /* Фото */
+        .photo-upload-box { display: flex; flex-direction: column; gap: 10px; }
+        .upload-btn { background: rgba(24, 24, 27, 0.8); border: 2px dashed #3f3f46; color: #a1a1aa; padding: 30px; border-radius: 16px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .upload-btn:active { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; color: #8b5cf6; }
+
+        /* Низ формы */
+        .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; z-index: 5; }
+        .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s, box-shadow 0.1s; user-select: none; }
         .btn:active { transform: translateY(3px); }
-        .btn-primary { background: #8b5cf6; color: white; padding: 18px; }
-        .btn-secondary { background: #18181b; color: #e4e4e7; border: 1px solid #3f3f46; padding: 18px; }
+        .btn-primary { background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; box-shadow: 0 5px 0 #4c1d95; padding: 18px; }
+        .btn-primary:active { box-shadow: 0 1px 0 #4c1d95; }
+        .btn-secondary { background: rgba(24, 24, 27, 0.8); color: #e4e4e7; border: 1px solid #3f3f46; box-shadow: 0 5px 0 #09090b; padding: 18px; }
+        .btn-secondary:active { box-shadow: 0 1px 0 #09090b; }
         .btn-half { flex: 1; }
+
+        /* Главное меню (заглушка) */
+        .main-menu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 50; display: none; flex-direction: column; padding: 20px; text-align: center; justify-content: center; }
+        .main-menu.active { display: flex; }
     </style>
 </head>
 <body>
 
+    <!-- Летающие эмодзи -->
+    <div class="bg-emoji" style="left: 10%; animation-delay: 0s;">🎮</div>
+    <div class="bg-emoji" style="left: 30%; animation-delay: 2s;">🏆</div>
+    <div class="bg-emoji" style="left: 70%; animation-delay: 4s;">💬</div>
+    <div class="bg-emoji" style="left: 90%; animation-delay: 1s;">❤️</div>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast">Ошибка</div>
+
+    <!-- СТАРТОВЫЙ ЭКРАН -->
     <div class="screen start-screen" id="startScreen">
         <div class="logo-main">LFG</div>
         <div class="logo-sub">Looking for group</div>
-        <div class="start-desc">Найди своих напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.</div>
+        <div class="start-desc">
+            Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
+        </div>
         <button class="start-btn" onclick="goToForm()">Создать анкету</button>
     </div>
 
+    <!-- ЭКРАН АНКЕТЫ -->
     <div class="screen hidden" id="regScreen">
         <div class="header">
             <button class="back-btn" onclick="prevStep()">←</button>
             <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
-            <span class="progress-text" id="progressText">1/3</span>
+            <span class="progress-text" id="progressText">1/9</span>
         </div>
+        
         <div class="form-container" id="formContainer"></div>
         <div class="bottom-actions" id="bottomActions"></div>
+    </div>
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div class="main-menu" id="mainMenu">
+        <h1 style="color: #8b5cf6; font-size: 40px; margin-bottom: 20px;">LFG</h1>
+        <p style="color: #a1a1aa; margin-bottom: 40px;">Добро пожаловать в главное меню!</p>
+        <button class="start-btn" onclick="location.reload()">Найти тиммейта</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         if (tg) tg.expand();
 
-        let step = 1;
+        let currentStep = 1;
+        const totalSteps = 9;
+        let selectedGames = {};
+        let selectedVibes = [];
 
+        // База игр (Ты можешь добавить остальные сюда)
+        const gamesData = [
+            { id: 'cs2', name: 'CS2', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z', ranks: ['Silver', 'Gold', 'MG', 'DMG', 'Faceit 1', 'Faceit 10', 'Global'] },
+            { id: 'dota', name: 'Dota 2', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', ranks: ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] },
+            { id: 'val', name: 'Valorant', icon: 'M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z', ranks: ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ascendant', 'Immortal', 'Radiant'] },
+            { id: 'apex', name: 'Apex', icon: 'M12 2L2 22h20L12 2z', ranks: ['Rookie', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Predator'] },
+            { id: 'pubg', name: 'PUBG', icon: 'M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z' },
+            { id: 'lol', name: 'LoL', icon: 'M12 2L2 22h20L12 2z', ranks: ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Emerald', 'Diamond', 'Master', 'Challenger'] },
+            { id: 'mine', name: 'Minecraft', icon: 'M4 4h16v16H4z' },
+            { id: 'gta', name: 'GTA V', icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z' },
+            { id: 'rust', name: 'Rust', icon: 'M12 2L2 22h20L12 2z', ranks: ['Scrap', 'Wood', 'Stone', 'Metal', 'HQM'] },
+            { id: 'tarkov', name: 'Tarkov', icon: 'M12 2L2 22h20L12 2z' }
+        ];
+
+        const citiesData = ["Москва", "Санкт-Петербург", "Минск", "Киев", "Алматы", "Африка", "Австралия", "Австрия", "Азербайджан"];
+
+        // Показ уведомления
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+            if (tg) tg.HapticFeedback.impactOccurred('heavy');
+        }
+
+        // Навигация
         function goToForm() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('regScreen').classList.remove('hidden');
-            step = 1;
-            updateUI();
+            currentStep = 1;
+            renderStep();
         }
 
         function nextStep() {
-            if (step < 3) {
-                step++;
-                updateUI();
+            // Валидация перед переходом
+            if (currentStep === 1) {
+                if (!document.querySelector('.checkbox-card.active')) return showToast("Согласитесь с правилами!");
+            }
+            if (currentStep === 2) {
+                if (document.querySelector('.text-input').value.trim() === '') return showToast("Введите свой игровой никнейм!");
+            }
+            if (currentStep === 3) {
+                if (Object.keys(selectedGames).length === 0) return showToast("Выберите хотя бы одну игру!");
+            }
+            if (currentStep === 4) {
+                if (!document.querySelector('.country-btn.active')) return showToast("Выберите свою страну!");
+            }
+            if (currentStep === 5) {
+                if (!document.querySelector('.gender-btn.active')) return showToast("Выберите свой пол!");
+            }
+            if (currentStep === 6) {
+                if (!document.querySelector('.plat-btn.active') || selectedVibes.length === 0) return showToast("Выберите платформу и вайб!");
+            }
+            if (currentStep === 7) {
+                if (document.querySelectorAll('.text-input')[0].value.trim() === '') return showToast("Расскажите о себе!");
+            }
+
+            if (currentStep < totalSteps) {
+                currentStep++;
+                renderStep();
             } else {
-                alert("Анкета успешно создана!");
-                location.reload();
+                // Финал
+                document.getElementById('regScreen').classList.add('hidden');
+                document.getElementById('mainMenu').classList.add('active');
             }
         }
 
         function prevStep() {
-            if (step > 1) {
-                step--;
-                updateUI();
+            if (currentStep > 1) {
+                currentStep--;
+                renderStep();
             } else {
                 document.getElementById('regScreen').classList.add('hidden');
                 document.getElementById('startScreen').classList.remove('hidden');
             }
         }
 
-        function updateUI() {
+        // Рендер
+        function renderStep() {
             const container = document.getElementById('formContainer');
             const actions = document.getElementById('bottomActions');
-            document.getElementById('progressBar').style.width = (step / 3 * 100) + '%';
-            document.getElementById('progressText').innerText = step + '/3';
+            document.getElementById('progressBar').style.width = (currentStep / totalSteps * 100) + '%';
+            document.getElementById('progressText').innerText = currentStep + '/' + totalSteps;
             
             container.innerHTML = '';
             actions.innerHTML = '';
+            let backBtn = `<button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>`;
+            let nextBtn = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
 
-            if (step === 1) {
+            // 1. ПРАВИЛА
+            if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="step-title">Правила проекта</div>
-                    <div class="step-desc">Ознакомься с правилами перед созданием анкеты.</div>
+                    <div class="step-desc">Пожалуйста, ознакомься с правилами нашего сообщества перед созданием анкеты. Это важно для комфортного общения.</div>
+                    <div style="background: rgba(24, 24, 27, 0.8); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid #3f3f46;">
+                        <ul style="list-style: none; padding: 0; color: #d4d4d8; font-size: 14px; line-height: 1.6;">
+                            <li style="margin-bottom: 10px;">✦ Общайтесь вежливо, без оскорблений и токсичности.</li>
+                            <li style="margin-bottom: 10px;">✦ Указывайте только достоверную информацию о себе и своем ранге.</li>
+                            <li>✦ Запрещены фейковые анкеты и спам.</li>
+                        </ul>
+                    </div>
                     <div class="checkbox-card" onclick="this.classList.toggle('active')">
                         <div class="checkbox-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
                         <div class="checkbox-text">Я согласен с правилами</div>
                     </div>
                 `;
                 actions.innerHTML = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
-            } else if (step === 2) {
+            } 
+            // 2. НИК
+            else if (currentStep === 2) {
                 container.innerHTML = `
-                    <div class="step-title">Твои данные</div>
-                    <div class="step-desc">Как тебя будут видеть другие.</div>
-                    <div class="input-group"><label class="input-label">Никнейм</label><input type="text" class="text-input" placeholder="Введи ник"></div>
+                    <div class="step-title">Твой никнейм</div>
+                    <div class="step-desc">Придумай или введи свой игровой никнейм. Именно так тебя будут видеть другие игроки в нашем сообществе.</div>
+                    <div class="input-group"><label class="input-label">Никнейм</label><input type="text" class="text-input" placeholder="Например: Sn1per"></div>
                 `;
-                actions.innerHTML = `
-                    <button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>
-                    <button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>
-                `;
-            } else if (step === 3) {
-                container.innerHTML = `
-                    <div class="step-title">Во что играешь?</div>
-                    <div class="step-desc">Выбери игру.</div>
-                    <div class="games-grid">
-                        <div class="game-card" onclick="this.classList.toggle('active')"><div class="game-name">CS2</div></div>
-                        <div class="game-card" onclick="this.classList.toggle('active')"><div class="game-name">Dota 2</div></div>
-                    </div>
-                `;
-                actions.innerHTML = `
-                    <button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>
-                    <button class="btn btn-primary btn-half" onclick="nextStep()">Завершить</button>
-                `;
+                actions.innerHTML = backBtn + nextBtn;
             }
-        }
-    </script>
-</body>
-</html>
+            // 3. ИГРЫ
+            else if (currentStep === 3) {
+                let gamesHTML = gamesData.map(game => `
+                    <div class="game-card" onclick="toggleGame(this, '${game.id}')" id="card-${game.id}">
+                        <div class="game-icon"><svg viewBox="0 0 24 24"><path d="${game.icon}"/></svg></div>
+                        <div class="game-name">${game.name}</div>
+    
