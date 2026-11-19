@@ -9,48 +9,27 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #050505;
-            color: #e4e4e7;
-            height: 100vh;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            background-color: #050505; color: #e4e4e7; height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
 
-        /* Летающие эмодзи на фоне */
+        /* Летающие эмодзи */
         .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
-        }
+        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
 
-        /* Уведомление (как на iPhone) */
+        /* Уведомление */
         .toast {
-            position: absolute;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 59, 48, 0.9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            backdrop-filter: blur(10px);
+            position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 59, 48, 0.9); color: white; padding: 15px 25px;
+            border-radius: 20px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; backdrop-filter: blur(10px);
         }
         .toast.show { top: 20px; }
 
         /* Экраны */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1; background: transparent;
+            display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; z-index: 1;
         }
         .screen.hidden { opacity: 0; transform: translateX(15%); pointer-events: none; z-index: 0; }
 
@@ -60,6 +39,7 @@
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
         .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
         
+        /* Кнопка старта */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 320px; cursor: pointer;
@@ -69,11 +49,7 @@
 
         /* Шапка */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-shrink: 0; z-index: 5; }
-        .back-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
-            width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
-            color: #a1a1aa; font-size: 20px; cursor: pointer;
-        }
+        .back-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; color: #a1a1aa; font-size: 20px; cursor: pointer; }
         .back-btn:active { background: rgba(255,255,255,0.15); }
         .progress-container { flex: 1; margin: 0 15px; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 11%; transition: width 0.4s; border-radius: 3px; }
@@ -93,13 +69,13 @@
         .checkbox-card.active .checkbox-box svg { display: block; }
         .checkbox-text { font-size: 15px; color: #e4e4e7; font-weight: 600; }
 
-        /* Поля ввода */
+        /* Поля */
         .input-group { margin-bottom: 20px; }
         .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 800; }
         .text-input { width: 100%; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #fff; padding: 15px; border-radius: 12px; font-size: 15px; outline: none; transition: 0.2s; }
         .text-input:focus { border-color: #8b5cf6; }
 
-        /* Сетка игр */
+        /* Игры */
         .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
         .game-card { background: rgba(24, 24, 27, 0.8); border: 1px solid #27272a; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; }
         .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
@@ -107,9 +83,9 @@
         .game-card.active .game-icon { background: #8b5cf6; }
         .game-icon svg { width: 20px; height: 20px; fill: #a1a1aa; }
         .game-card.active .game-icon svg { fill: white; }
-        .game-name { font-size: 13px; font-weight: 700; color: #e4e4e7; text-align: center; }
+        .game-name { font-size: 13px; font-weight: 700; color: #e4e4e7; }
 
-        /* Ползунок ранга */
+        /* Ранги */
         .rank-slider-container { display: none; background: rgba(24, 24, 27, 0.9); border: 1px solid #8b5cf6; padding: 15px; border-radius: 14px; margin-bottom: 12px; }
         .rank-slider-container.active { display: block; }
         .rank-title { font-size: 13px; color: #a1a1aa; margin-bottom: 10px; text-align: center; }
@@ -122,24 +98,24 @@
         .country-btn { background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #e4e4e7; padding: 15px; border-radius: 12px; font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.2s; }
         .country-btn.active { background: #8b5cf6; border-color: #8b5cf6; color: white; }
 
-        /* Пол и Вайбы */
+        /* Пол */
         .gender-grid { display: flex; gap: 10px; }
         .gender-btn { flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #3f3f46; background: rgba(24, 24, 27, 0.8); color: #e4e4e7; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .gender-btn.male.active { background: #3b82f6; border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); color: white; }
-        .gender-btn.female.active { background: #ec4899; border-color: #ec4899; box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); color: white; }
+        .gender-btn.male.active { background: #3b82f6; border-color: #3b82f6; color: white; }
+        .gender-btn.female.active { background: #ec4899; border-color: #ec4899; color: white; }
 
+        /* Вайбы */
         .vibes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .vibe-btn { background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; padding: 10px; border-radius: 12px; text-align: center; font-size: 13px; cursor: pointer; transition: 0.2s; }
-        .vibe-btn.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.2); color: white; }
+        .vibe-btn.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.2); }
 
         /* Фото */
         .photo-upload-box { display: flex; flex-direction: column; gap: 10px; }
-        .upload-btn { background: rgba(24, 24, 27, 0.8); border: 2px dashed #3f3f46; color: #a1a1aa; padding: 30px; border-radius: 16px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .upload-btn:active { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; color: #8b5cf6; }
+        .upload-btn { background: rgba(24, 24, 27, 0.8); border: 2px dashed #3f3f46; color: #a1a1aa; padding: 30px; border-radius: 16px; text-align: center; cursor: pointer; }
 
-        /* Низ формы */
+        /* Кнопки */
         .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; z-index: 5; }
-        .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s, box-shadow 0.1s; user-select: none; }
+        .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s; user-select: none; }
         .btn:active { transform: translateY(3px); }
         .btn-primary { background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; box-shadow: 0 5px 0 #4c1d95; padding: 18px; }
         .btn-primary:active { box-shadow: 0 1px 0 #4c1d95; }
@@ -147,23 +123,20 @@
         .btn-secondary:active { box-shadow: 0 1px 0 #09090b; }
         .btn-half { flex: 1; }
 
-        /* Главное меню (заглушка) */
+        /* Главное меню */
         .main-menu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 50; display: none; flex-direction: column; padding: 20px; text-align: center; justify-content: center; }
         .main-menu.active { display: flex; }
     </style>
 </head>
 <body>
 
-    <!-- Летающие эмодзи -->
     <div class="bg-emoji" style="left: 10%; animation-delay: 0s;">🎮</div>
     <div class="bg-emoji" style="left: 30%; animation-delay: 2s;">🏆</div>
     <div class="bg-emoji" style="left: 70%; animation-delay: 4s;">💬</div>
     <div class="bg-emoji" style="left: 90%; animation-delay: 1s;">❤️</div>
 
-    <!-- Уведомление -->
     <div class="toast" id="toast">Ошибка</div>
 
-    <!-- СТАРТОВЫЙ ЭКРАН -->
     <div class="screen start-screen" id="startScreen">
         <div class="logo-main">LFG</div>
         <div class="logo-sub">Looking for group</div>
@@ -173,19 +146,16 @@
         <button class="start-btn" onclick="goToForm()">Создать анкету</button>
     </div>
 
-    <!-- ЭКРАН АНКЕТЫ -->
     <div class="screen hidden" id="regScreen">
         <div class="header">
             <button class="back-btn" onclick="prevStep()">←</button>
             <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
             <span class="progress-text" id="progressText">1/9</span>
         </div>
-        
         <div class="form-container" id="formContainer"></div>
         <div class="bottom-actions" id="bottomActions"></div>
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ -->
     <div class="main-menu" id="mainMenu">
         <h1 style="color: #8b5cf6; font-size: 40px; margin-bottom: 20px;">LFG</h1>
         <p style="color: #a1a1aa; margin-bottom: 40px;">Добро пожаловать в главное меню!</p>
@@ -201,7 +171,6 @@
         let selectedGames = {};
         let selectedVibes = [];
 
-        // База игр (Ты можешь добавить остальные сюда)
         const gamesData = [
             { id: 'cs2', name: 'CS2', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z', ranks: ['Silver', 'Gold', 'MG', 'DMG', 'Faceit 1', 'Faceit 10', 'Global'] },
             { id: 'dota', name: 'Dota 2', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', ranks: ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] },
@@ -217,7 +186,6 @@
 
         const citiesData = ["Москва", "Санкт-Петербург", "Минск", "Киев", "Алматы", "Африка", "Австралия", "Австрия", "Азербайджан"];
 
-        // Показ уведомления
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
@@ -226,7 +194,6 @@
             if (tg) tg.HapticFeedback.impactOccurred('heavy');
         }
 
-        // Навигация
         function goToForm() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('regScreen').classList.remove('hidden');
@@ -235,34 +202,18 @@
         }
 
         function nextStep() {
-            // Валидация перед переходом
-            if (currentStep === 1) {
-                if (!document.querySelector('.checkbox-card.active')) return showToast("Согласитесь с правилами!");
-            }
-            if (currentStep === 2) {
-                if (document.querySelector('.text-input').value.trim() === '') return showToast("Введите свой игровой никнейм!");
-            }
-            if (currentStep === 3) {
-                if (Object.keys(selectedGames).length === 0) return showToast("Выберите хотя бы одну игру!");
-            }
-            if (currentStep === 4) {
-                if (!document.querySelector('.country-btn.active')) return showToast("Выберите свою страну!");
-            }
-            if (currentStep === 5) {
-                if (!document.querySelector('.gender-btn.active')) return showToast("Выберите свой пол!");
-            }
-            if (currentStep === 6) {
-                if (!document.querySelector('.plat-btn.active') || selectedVibes.length === 0) return showToast("Выберите платформу и вайб!");
-            }
-            if (currentStep === 7) {
-                if (document.querySelectorAll('.text-input')[0].value.trim() === '') return showToast("Расскажите о себе!");
-            }
+            if (currentStep === 1 && !document.querySelector('.checkbox-card.active')) return showToast("Согласитесь с правилами!");
+            if (currentStep === 2 && document.querySelector('.text-input').value.trim() === '') return showToast("Введите свой игровой никнейм!");
+            if (currentStep === 3 && Object.keys(selectedGames).length === 0) return showToast("Выберите хотя бы одну игру!");
+            if (currentStep === 4 && !document.querySelector('.country-btn.active')) return showToast("Выберите свою страну!");
+            if (currentStep === 5 && !document.querySelector('.gender-btn.active')) return showToast("Выберите свой пол!");
+            if (currentStep === 6 && (!document.querySelector('.gender-btn.active') || selectedVibes.length === 0)) return showToast("Выберите платформу и вайб!");
+            if (currentStep === 7 && document.querySelectorAll('.text-input')[0].value.trim() === '') return showToast("Расскажите о себе!");
 
             if (currentStep < totalSteps) {
                 currentStep++;
                 renderStep();
             } else {
-                // Финал
                 document.getElementById('regScreen').classList.add('hidden');
                 document.getElementById('mainMenu').classList.add('active');
             }
@@ -278,19 +229,16 @@
             }
         }
 
-        // Рендер
         function renderStep() {
             const container = document.getElementById('formContainer');
             const actions = document.getElementById('bottomActions');
             document.getElementById('progressBar').style.width = (currentStep / totalSteps * 100) + '%';
             document.getElementById('progressText').innerText = currentStep + '/' + totalSteps;
-            
             container.innerHTML = '';
             actions.innerHTML = '';
             let backBtn = `<button class="btn btn-secondary btn-half" onclick="prevStep()">Назад</button>`;
             let nextBtn = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
 
-            // 1. ПРАВИЛА
             if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="step-title">Правила проекта</div>
@@ -309,7 +257,6 @@
                 `;
                 actions.innerHTML = `<button class="btn btn-primary btn-half" onclick="nextStep()">Далее</button>`;
             } 
-            // 2. НИК
             else if (currentStep === 2) {
                 container.innerHTML = `
                     <div class="step-title">Твой никнейм</div>
@@ -318,10 +265,30 @@
                 `;
                 actions.innerHTML = backBtn + nextBtn;
             }
-            // 3. ИГРЫ
             else if (currentStep === 3) {
                 let gamesHTML = gamesData.map(game => `
                     <div class="game-card" onclick="toggleGame(this, '${game.id}')" id="card-${game.id}">
                         <div class="game-icon"><svg viewBox="0 0 24 24"><path d="${game.icon}"/></svg></div>
                         <div class="game-name">${game.name}</div>
-    
+                    </div>
+                `).join('');
+                container.innerHTML = `
+                    <div class="step-title">Во что играешь?</div>
+                    <div class="step-desc">Выбери игры, в которых ты ищешь напарников.</div>
+                    <div class="games-grid">${gamesHTML}</div>
+                    <div id="rankSlidersContainer"></div>
+                `;
+                actions.innerHTML = backBtn + nextBtn;
+            }
+            else if (currentStep === 4) {
+                container.innerHTML = `
+                    <div class="step-title">Откуда ты?</div>
+                    <div class="step-desc">Выбери свою страну.</div>
+                    <div class="country-grid">
+                        <div class="country-btn" onclick="selectCountry(this)">Россия</div>
+                        <div class="country-btn" onclick="selectCountry(this)">Беларусь</div>
+                        <div class="country-btn" onclick="selectCountry(this)">Украина</div>
+                        <div class="country-btn" onclick="selectCountry(this)">Казахстан</div>
+                        <div class="country-btn" style="grid-column: span 2;" onclick="selectCountry(this, true)">Другая</div>
+                    </div>
+        
