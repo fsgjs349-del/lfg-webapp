@@ -17,7 +17,7 @@
         .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
 
-        /* Уведомление (как на iPhone) */
+        /* Уведомление */
         .toast {
             position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 59, 48, 0.95); color: white; padding: 15px 25px;
@@ -133,13 +133,14 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <a href="#" class="start-btn" onclick="goTo(1); return false;">Создать анкету</a>
+        <!-- Кнопка теперь работает без блокирующего return false -->
+        <a href="#" class="start-btn" onclick="goTo(1);">Создать анкету</a>
     </div>
 
     <!-- ЭТАП 1: ПРАВИЛА -->
     <div class="screen hidden" id="step1">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(0); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(0);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 11%;"></div></div>
             <span class="progress-text">1/9</span>
         </div>
@@ -158,7 +159,7 @@
                 <div class="checkbox-text">Я согласен с правилами</div>
             </div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.getElementById('rulesCheck').classList.contains('active')) { showToast('Согласитесь с правилами!'); } else { goTo(2); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.getElementById('rulesCheck').classList.contains('active')) { showToast('Согласитесь с правилами!'); } else { goTo(2); }">Далее</a>
             </div>
         </div>
     </div>
@@ -166,7 +167,7 @@
     <!-- ЭТАП 2: НИК -->
     <div class="screen hidden" id="step2">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(1); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(1);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 22%;"></div></div>
             <span class="progress-text">2/9</span>
         </div>
@@ -175,7 +176,7 @@
             <div class="step-desc">Придумай или введи свой игровой никнейм. Именно так тебя будут видеть другие.</div>
             <div class="input-group"><label class="input-label">Никнейм</label><input type="text" id="nickInput" class="text-input" placeholder="Например: Sn1per"></div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(document.getElementById('nickInput').value.trim() === '') { showToast('Введите свой никнейм!'); } else { goTo(3); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(document.getElementById('nickInput').value.trim() === '') { showToast('Введите свой никнейм!'); } else { goTo(3); }">Далее</a>
             </div>
         </div>
     </div>
@@ -183,7 +184,7 @@
     <!-- ЭТАП 3: ИГРЫ -->
     <div class="screen hidden" id="step3">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(2); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(2);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 33%;"></div></div>
             <span class="progress-text">3/9</span>
         </div>
@@ -197,7 +198,7 @@
                 <div class="game-card" onclick="this.classList.toggle('active')"><div class="game-name">Apex</div></div>
             </div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(document.querySelectorAll('.game-card.active').length === 0) { showToast('Выберите хотя бы одну игру!'); } else { goTo(4); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(document.querySelectorAll('.game-card.active').length === 0) { showToast('Выберите хотя бы одну игру!'); } else { goTo(4); }">Далее</a>
             </div>
         </div>
     </div>
@@ -205,7 +206,7 @@
     <!-- ЭТАП 4: СТРАНЫ -->
     <div class="screen hidden" id="step4">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(3); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(3);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 44%;"></div></div>
             <span class="progress-text">4/9</span>
         </div>
@@ -219,7 +220,7 @@
                 <div class="country-btn" onclick="selectSingle(this, 'country')">Казахстан</div>
             </div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.country-btn.active')) { showToast('Выберите свою страну!'); } else { goTo(5); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.country-btn.active')) { showToast('Выберите свою страну!'); } else { goTo(5); }">Далее</a>
             </div>
         </div>
     </div>
@@ -227,7 +228,7 @@
     <!-- ЭТАП 5: ВОЗРАСТ И ПОЛ -->
     <div class="screen hidden" id="step5">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(4); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(4);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 55%;"></div></div>
             <span class="progress-text">5/9</span>
         </div>
@@ -247,7 +248,7 @@
                 </div>
             </div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.gender-btn.active')) { showToast('Выберите свой пол!'); } else { goTo(6); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.gender-btn.active')) { showToast('Выберите свой пол!'); } else { goTo(6); }">Далее</a>
             </div>
         </div>
     </div>
@@ -255,7 +256,7 @@
     <!-- ЭТАП 6: ПЛАТФОРМА И ВАЙБ -->
     <div class="screen hidden" id="step6">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(5); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(5);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 66%;"></div></div>
             <span class="progress-text">6/9</span>
         </div>
@@ -282,7 +283,7 @@
                 </div>
             </div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.gender-btn.active')) { showToast('Выберите платформу!'); } else if(document.querySelectorAll('.vibe-btn.active').length === 0) { showToast('Выберите хотя бы один вайб!'); } else { goTo(7); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(!document.querySelector('.gender-btn.active')) { showToast('Выберите платформу!'); } else if(document.querySelectorAll('.vibe-btn.active').length === 0) { showToast('Выберите хотя бы один вайб!'); } else { goTo(7); }">Далее</a>
             </div>
         </div>
     </div>
@@ -290,7 +291,7 @@
     <!-- ЭТАП 7: О СЕБЕ -->
     <div class="screen hidden" id="step7">
         <div class="header">
-            <a href="#" class="back-btn" onclick="goBack(6); return false;">←</a>
+            <a href="#" class="back-btn" onclick="goBack(6);">←</a>
             <div class="progress-container"><div class="progress-bar" style="width: 77%;"></div></div>
             <span class="progress-text">7/9</span>
         </div>
@@ -299,7 +300,7 @@
             <div class="step-desc">Расскажи немного о себе.</div>
             <div class="input-group"><textarea id="aboutInput" class="text-input" rows="5" placeholder="Пара слов о тебе..."></textarea></div>
             <div class="bottom-actions">
-                <a href="#" class="btn btn-primary btn-half" onclick="if(document.getElementById('aboutInput').value.trim() === '') { showToast('Расскажите о себе!'); } else { goTo(8); } return false;">Далее</a>
+                <a href="#" class="btn btn-primary btn-half" onclick="if(document.getElementById('aboutInput').value.trim() === '') { showToast('Расскажите о себе!'); } else { goTo(8); }">Далее</a>
             </div>
         </div>
     </div>
@@ -307,4 +308,5 @@
     <!-- ЭТАП 8: ФОТО -->
     <div class="screen hidden" id="step8">
         <div class="header">
-         
+            <a href="#" class="back-btn" onclick="goBack(7);">←</a>
+            <div class="progress-container"><div class="progress-bar" style="width: 88%;"></div><
