@@ -23,6 +23,7 @@
             background: rgba(255, 59, 48, 0.9); color: white; padding: 15px 25px;
             border-radius: 20px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; backdrop-filter: blur(10px);
+            white-space: nowrap;
         }
         .toast.show { top: 20px; }
 
@@ -37,13 +38,14 @@
         .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
         .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
-        .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
+        .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; margin-left: auto; margin-right: auto; }
         
-        /* Кнопка старта */
+        /* Кнопка старта (Идеально ровная) */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 320px; cursor: pointer;
-            box-shadow: 0 8px 0 #4c1d95, 0 15px 30px rgba(0,0,0,0.6); transition: transform 0.1s, box-shadow 0.1s; user-select: none;
+            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none;
+            display: flex; justify-content: center; align-items: center; margin: 0 auto;
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
@@ -143,7 +145,7 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <button class="start-btn" onclick="goToForm()">Создать анкету</button>
+        <button class="start-btn" id="startBtn">Создать анкету</button>
     </div>
 
     <div class="screen hidden" id="regScreen">
@@ -163,6 +165,14 @@
     </div>
 
     <script>
+        // СРАЗУ ПРИВЯЗЫВАЕМ КНОПКУ, ЧТОБЫ ОНА РАБОТАЛА 100%
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('regScreen').classList.remove('hidden');
+            currentStep = 1;
+            renderStep();
+        });
+
         const tg = window.Telegram.WebApp;
         if (tg) tg.expand();
 
@@ -192,13 +202,6 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
             if (tg) tg.HapticFeedback.impactOccurred('heavy');
-        }
-
-        function goToForm() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('regScreen').classList.remove('hidden');
-            currentStep = 1;
-            renderStep();
         }
 
         function nextStep() {
@@ -287,8 +290,4 @@
                     <div class="country-grid">
                         <div class="country-btn" onclick="selectCountry(this)">Россия</div>
                         <div class="country-btn" onclick="selectCountry(this)">Беларусь</div>
-                        <div class="country-btn" onclick="selectCountry(this)">Украина</div>
-                        <div class="country-btn" onclick="selectCountry(this)">Казахстан</div>
-                        <div class="country-btn" style="grid-column: span 2;" onclick="selectCountry(this, true)">Другая</div>
-                    </div>
-        
+                        <div class="country-btn" onclick="selectCountry(this)">Украина</div
