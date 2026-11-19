@@ -34,18 +34,25 @@
         }
         .screen.hidden { opacity: 0; transform: translateX(15%); pointer-events: none; z-index: 0; }
 
-        /* Стартовый экран */
-        .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
+        /* Стартовый экран (Исправлен) */
+        .start-screen { 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            padding: 20px; 
+            z-index: 10; 
+            width: 100%;
+        }
         .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
-        .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; margin-left: auto; margin-right: auto; }
+        .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
         
-        /* Кнопка старта (Идеально ровная) */
+        /* Кнопка старта (Идеально ровная и по центру) */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
-            font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 320px; cursor: pointer;
+            font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 300px; cursor: pointer;
             box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none;
-            display: flex; justify-content: center; align-items: center; margin: 0 auto;
+            display: block; margin: 0 auto;
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
@@ -145,7 +152,8 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <button class="start-btn" id="startBtn">Создать анкету</button>
+        <!-- Кнопка вызывает функцию напрямую -->
+        <button class="start-btn" onclick="startRegistration()">Создать анкету</button>
     </div>
 
     <div class="screen hidden" id="regScreen">
@@ -165,14 +173,6 @@
     </div>
 
     <script>
-        // СРАЗУ ПРИВЯЗЫВАЕМ КНОПКУ, ЧТОБЫ ОНА РАБОТАЛА 100%
-        document.getElementById('startBtn').addEventListener('click', function() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('regScreen').classList.remove('hidden');
-            currentStep = 1;
-            renderStep();
-        });
-
         const tg = window.Telegram.WebApp;
         if (tg) tg.expand();
 
@@ -195,6 +195,14 @@
         ];
 
         const citiesData = ["Москва", "Санкт-Петербург", "Минск", "Киев", "Алматы", "Африка", "Австралия", "Австрия", "Азербайджан"];
+
+        // ГЛАВНАЯ ФУНКЦИЯ СТАРТА
+        function startRegistration() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('regScreen').classList.remove('hidden');
+            currentStep = 1;
+            renderStep();
+        }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -290,4 +298,4 @@
                     <div class="country-grid">
                         <div class="country-btn" onclick="selectCountry(this)">Россия</div>
                         <div class="country-btn" onclick="selectCountry(this)">Беларусь</div>
-                        <div class="country-btn" onclick="selectCountry(this)">Украина</div
+                        <div class="country-btn" onclick="s
