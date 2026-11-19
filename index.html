@@ -13,7 +13,7 @@
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
 
-        /* Летающие эмодзи */
+        /* Анимации и фон */
         .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
 
@@ -22,8 +22,7 @@
             position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 59, 48, 0.9); color: white; padding: 15px 25px;
             border-radius: 20px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; backdrop-filter: blur(10px);
-            white-space: nowrap;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
         }
         .toast.show { top: 20px; }
 
@@ -34,25 +33,17 @@
         }
         .screen.hidden { opacity: 0; transform: translateX(15%); pointer-events: none; z-index: 0; }
 
-        /* Стартовый экран (Исправлен) */
-        .start-screen { 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            padding: 20px; 
-            z-index: 10; 
-            width: 100%;
-        }
+        /* Стартовый экран */
+        .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
         .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
         .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
         
-        /* Кнопка старта (Идеально ровная и по центру) */
+        /* Кнопка старта */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 300px; cursor: pointer;
-            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none;
-            display: block; margin: 0 auto;
+            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none; display: block;
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
@@ -88,10 +79,6 @@
         .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
         .game-card { background: rgba(24, 24, 27, 0.8); border: 1px solid #27272a; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; }
         .game-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.15); }
-        .game-icon { width: 36px; height: 36px; background: #27272a; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
-        .game-card.active .game-icon { background: #8b5cf6; }
-        .game-icon svg { width: 20px; height: 20px; fill: #a1a1aa; }
-        .game-card.active .game-icon svg { fill: white; }
         .game-name { font-size: 13px; font-weight: 700; color: #e4e4e7; }
 
         /* Ранги */
@@ -152,8 +139,8 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <!-- Кнопка вызывает функцию напрямую -->
-        <button class="start-btn" onclick="startRegistration()">Создать анкету</button>
+        <!-- Кнопка теперь в HTML -->
+        <button class="start-btn" onclick="startApp()">Создать анкету</button>
     </div>
 
     <div class="screen hidden" id="regScreen">
@@ -173,6 +160,14 @@
     </div>
 
     <script>
+        // ГЛАВНАЯ ФУНКЦИЯ СТАРТА
+        function startApp() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('regScreen').classList.remove('hidden');
+            currentStep = 1;
+            renderStep();
+        }
+
         const tg = window.Telegram.WebApp;
         if (tg) tg.expand();
 
@@ -181,28 +176,22 @@
         let selectedGames = {};
         let selectedVibes = [];
 
+        // УПРОЩЕННЫЙ СПИСОК ИГР (Чтобы код не ломался при копировании)
+        // Ты можешь добавлять сюда игры по аналогии: { id: 'id', name: 'Имя', ranks: ['Ранг1', 'Ранг2'] }
         const gamesData = [
-            { id: 'cs2', name: 'CS2', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z', ranks: ['Silver', 'Gold', 'MG', 'DMG', 'Faceit 1', 'Faceit 10', 'Global'] },
-            { id: 'dota', name: 'Dota 2', icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5', ranks: ['Herald', 'Guardian', 'Crusader', 'Archon', 'Legend', 'Ancient', 'Divine', 'Immortal'] },
-            { id: 'val', name: 'Valorant', icon: 'M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z', ranks: ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ascendant', 'Immortal', 'Radiant'] },
-            { id: 'apex', name: 'Apex', icon: 'M12 2L2 22h20L12 2z', ranks: ['Rookie', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Predator'] },
-            { id: 'pubg', name: 'PUBG', icon: 'M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z' },
-            { id: 'lol', name: 'LoL', icon: 'M12 2L2 22h20L12 2z', ranks: ['Iron', 'Bronze', 'Silver', 'Gold', 'Platinum', 'Emerald', 'Diamond', 'Master', 'Challenger'] },
-            { id: 'mine', name: 'Minecraft', icon: 'M4 4h16v16H4z' },
-            { id: 'gta', name: 'GTA V', icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z' },
-            { id: 'rust', name: 'Rust', icon: 'M12 2L2 22h20L12 2z', ranks: ['Scrap', 'Wood', 'Stone', 'Metal', 'HQM'] },
-            { id: 'tarkov', name: 'Tarkov', icon: 'M12 2L2 22h20L12 2z' }
+            { id: 'cs2', name: 'CS2', ranks: ['Silver', 'Gold', 'MG', 'Faceit 10'] },
+            { id: 'dota', name: 'Dota 2', ranks: ['Herald', 'Guardian', 'Legend', 'Immortal'] },
+            { id: 'val', name: 'Valorant', ranks: ['Iron', 'Gold', 'Diamond', 'Radiant'] },
+            { id: 'apex', name: 'Apex', ranks: ['Rookie', 'Gold', 'Master', 'Predator'] },
+            { id: 'pubg', name: 'PUBG' },
+            { id: 'lol', name: 'LoL', ranks: ['Iron', 'Gold', 'Master', 'Challenger'] },
+            { id: 'mine', name: 'Minecraft' },
+            { id: 'gta', name: 'GTA V' },
+            { id: 'rust', name: 'Rust', ranks: ['Wood', 'Stone', 'Metal'] },
+            { id: 'tarkov', name: 'Tarkov' }
         ];
 
         const citiesData = ["Москва", "Санкт-Петербург", "Минск", "Киев", "Алматы", "Африка", "Австралия", "Австрия", "Азербайджан"];
-
-        // ГЛАВНАЯ ФУНКЦИЯ СТАРТА
-        function startRegistration() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('regScreen').classList.remove('hidden');
-            currentStep = 1;
-            renderStep();
-        }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -253,7 +242,7 @@
             if (currentStep === 1) {
                 container.innerHTML = `
                     <div class="step-title">Правила проекта</div>
-                    <div class="step-desc">Пожалуйста, ознакомься с правилами нашего сообщества перед созданием анкеты. Это важно для комфортного общения.</div>
+                    <div class="step-desc">Пожалуйста, ознакомься с правилами нашего сообщества перед созданием анкеты.</div>
                     <div style="background: rgba(24, 24, 27, 0.8); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid #3f3f46;">
                         <ul style="list-style: none; padding: 0; color: #d4d4d8; font-size: 14px; line-height: 1.6;">
                             <li style="margin-bottom: 10px;">✦ Общайтесь вежливо, без оскорблений и токсичности.</li>
@@ -271,7 +260,7 @@
             else if (currentStep === 2) {
                 container.innerHTML = `
                     <div class="step-title">Твой никнейм</div>
-                    <div class="step-desc">Придумай или введи свой игровой никнейм. Именно так тебя будут видеть другие игроки в нашем сообществе.</div>
+                    <div class="step-desc">Придумай или введи свой игровой никнейм.</div>
                     <div class="input-group"><label class="input-label">Никнейм</label><input type="text" class="text-input" placeholder="Например: Sn1per"></div>
                 `;
                 actions.innerHTML = backBtn + nextBtn;
@@ -279,7 +268,6 @@
             else if (currentStep === 3) {
                 let gamesHTML = gamesData.map(game => `
                     <div class="game-card" onclick="toggleGame(this, '${game.id}')" id="card-${game.id}">
-                        <div class="game-icon"><svg viewBox="0 0 24 24"><path d="${game.icon}"/></svg></div>
                         <div class="game-name">${game.name}</div>
                     </div>
                 `).join('');
@@ -298,4 +286,27 @@
                     <div class="country-grid">
                         <div class="country-btn" onclick="selectCountry(this)">Россия</div>
                         <div class="country-btn" onclick="selectCountry(this)">Беларусь</div>
-                        <div class="country-btn" onclick="s
+                        <div class="country-btn" onclick="selectCountry(this)">Украина</div>
+                        <div class="country-btn" onclick="selectCountry(this)">Казахстан</div>
+                        <div class="country-btn" style="grid-column: span 2;" onclick="selectCountry(this, true)">Другая</div>
+                    </div>
+                    <div id="cityInputContainer" style="display: none;">
+                        <div class="input-group"><label class="input-label">Твой город</label><input type="text" class="text-input" id="cityInput" placeholder="Начни вводить город..." oninput="showCitySuggestions(this.value)"></div>
+                        <div id="citySuggestions" style="background: #18181b; border-radius: 12px; overflow: hidden;"></div>
+                    </div>
+                `;
+                actions.innerHTML = backBtn + nextBtn;
+            }
+            else if (currentStep === 5) {
+                container.innerHTML = `
+                    <div class="step-title">Твои данные</div>
+                    <div class="step-desc">Укажи возраст и пол.</div>
+                    <div class="input-group">
+                        <label class="input-label">Возраст</label>
+                        <div style="text-align: center; font-size: 24px; font-weight: bold; color: #8b5cf6; margin-bottom: 10px;" id="ageVal">20</div>
+                        <input type="range" class="range-slider" min="10" max="70" value="20" oninput="document.getElementById('ageVal').innerText = this.value">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Время игры</label>
+                        <input type="time" class="text-input" value="20:00">
+                    </di
