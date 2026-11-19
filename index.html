@@ -13,25 +13,20 @@
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
 
-        /* Летающие эмодзи */
         .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
 
-        /* Экраны */
         .screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; transition: opacity 0.3s ease, transform 0.3s ease; z-index: 1;
         }
-        /* Класс для скрытия экрана */
         .screen.hidden { opacity: 0; transform: translateX(15%); pointer-events: none; z-index: 0; }
 
-        /* Стартовый экран */
         .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
         .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
         .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
         
-        /* Кнопка старта */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 300px; cursor: pointer;
@@ -40,19 +35,16 @@
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
-        /* Шапка */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-shrink: 0; z-index: 5; }
         .back-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; color: #a1a1aa; font-size: 20px; cursor: pointer; text-decoration: none; }
         .progress-container { flex: 1; margin: 0 15px; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 11%; border-radius: 3px; }
         .progress-text { font-size: 13px; color: #71717a; font-weight: 800; }
 
-        /* Контент */
         .form-container { flex: 1; padding: 10px 20px 20px 20px; overflow-y: auto; display: flex; flex-direction: column; z-index: 2; }
         .step-title { font-size: 26px; font-weight: 800; margin-bottom: 10px; color: #fff; font-family: 'Georgia', serif; }
         .step-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 25px; line-height: 1.5; }
 
-        /* Чекбокс */
         .checkbox-card { display: flex; align-items: center; gap: 15px; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; padding: 20px; border-radius: 16px; cursor: pointer; transition: 0.2s; }
         .checkbox-card.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
         .checkbox-box { width: 26px; height: 26px; border-radius: 6px; border: 2px solid #52525b; display: flex; justify-content: center; align-items: center; transition: 0.2s; }
@@ -61,13 +53,11 @@
         .checkbox-card.active .checkbox-box svg { display: block; }
         .checkbox-text { font-size: 15px; color: #e4e4e7; font-weight: 600; }
 
-        /* Поля */
         .input-group { margin-bottom: 20px; }
         .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 800; }
         .text-input { width: 100%; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #fff; padding: 15px; border-radius: 12px; font-size: 15px; outline: none; transition: 0.2s; }
         .text-input:focus { border-color: #8b5cf6; }
 
-        /* Кнопки */
         .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; z-index: 5; }
         .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: transform 0.1s; user-select: none; text-decoration: none; }
         .btn:active { transform: translateY(3px); }
@@ -92,15 +82,14 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <!-- КНОПКА-ССЫЛКА (БЕЗ JS) -->
-        <a href="#step1" class="start-btn" onclick="document.getElementById('startScreen').classList.add('hidden'); document.getElementById('regScreen').classList.remove('hidden');">Создать анкету</a>
+        <a href="#step1" class="start-btn" onclick="document.getElementById('startScreen').classList.add('hidden'); document.getElementById('step1').classList.remove('hidden');">Создать анкету</a>
     </div>
 
-    <!-- ЭКРАН АНКЕТЫ -->
-    <div class="screen hidden" id="regScreen">
+    <!-- ЭТАП 1 -->
+    <div class="screen hidden" id="step1">
         <div class="header">
-            <a href="#" class="back-btn" onclick="document.getElementById('regScreen').classList.add('hidden'); document.getElementById('startScreen').classList.remove('hidden'); return false;">←</a>
-            <div class="progress-container"><div class="progress-bar"></div></div>
+            <a href="#" class="back-btn" onclick="document.getElementById('step1').classList.add('hidden'); document.getElementById('startScreen').classList.remove('hidden'); return false;">←</a>
+            <div class="progress-container"><div class="progress-bar" style="width: 11%;"></div></div>
             <span class="progress-text">1/9</span>
         </div>
         <div class="form-container">
@@ -118,6 +107,24 @@
                 <div class="checkbox-text">Я согласен с правилами</div>
             </div>
             <div class="bottom-actions">
+                <a href="#step2" class="btn btn-primary btn-half" style="width:100%;" onclick="document.getElementById('step1').classList.add('hidden'); document.getElementById('step2').classList.remove('hidden');">Далее</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЭТАП 2 (ЗАГЛУШКА ДЛЯ ПРИМЕРА) -->
+    <div class="screen hidden" id="step2">
+        <div class="header">
+            <a href="#" class="back-btn" onclick="document.getElementById('step2').classList.add('hidden'); document.getElementById('step1').classList.remove('hidden'); return false;">←</a>
+            <div class="progress-container"><div class="progress-bar" style="width: 22%;"></div></div>
+            <span class="progress-text">2/9</span>
+        </div>
+        <div class="form-container">
+            <div class="step-title">Твой никнейм</div>
+            <div class="step-desc">Придумай или введи свой игровой никнейм.</div>
+            <div class="input-group"><label class="input-label">Никнейм</label><input type="text" class="text-input" placeholder="Например: Sn1per"></div>
+            <div class="bottom-actions">
+                <!-- Эту кнопку пока оставим просто ссылкой в никуда, так как это заглушка -->
                 <a href="#" class="btn btn-primary btn-half" style="width:100%;">Далее</a>
             </div>
         </div>
