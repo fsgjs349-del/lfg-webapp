@@ -13,7 +13,7 @@
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
 
-        /* Анимации и фон */
+        /* Летающие эмодзи */
         .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
 
@@ -22,7 +22,7 @@
             position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 59, 48, 0.9); color: white; padding: 15px 25px;
             border-radius: 20px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; backdrop-filter: blur(10px);
         }
         .toast.show { top: 20px; }
 
@@ -39,11 +39,11 @@
         .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
         .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
         
-        /* Кнопка старта */
+        /* Кнопка старта (по центру) */
         .start-btn {
             background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
             font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 300px; cursor: pointer;
-            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none; display: block;
+            box-shadow: 0 8px 0 #4c1d95; transition: transform 0.1s, box-shadow 0.1s; user-select: none;
         }
         .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
 
@@ -139,7 +139,6 @@
         <div class="start-desc">
             Найди своих идеальных напарников для игр. Укажи ранг, выбери платформу и общайся с теми, кто разделяет твои интересы.
         </div>
-        <!-- Кнопка теперь в HTML -->
         <button class="start-btn" onclick="startApp()">Создать анкету</button>
     </div>
 
@@ -160,7 +159,7 @@
     </div>
 
     <script>
-        // ГЛАВНАЯ ФУНКЦИЯ СТАРТА
+        // Функция старта - вынесена в самое начало
         function startApp() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('regScreen').classList.remove('hidden');
@@ -176,8 +175,6 @@
         let selectedGames = {};
         let selectedVibes = [];
 
-        // УПРОЩЕННЫЙ СПИСОК ИГР (Чтобы код не ломался при копировании)
-        // Ты можешь добавлять сюда игры по аналогии: { id: 'id', name: 'Имя', ranks: ['Ранг1', 'Ранг2'] }
         const gamesData = [
             { id: 'cs2', name: 'CS2', ranks: ['Silver', 'Gold', 'MG', 'Faceit 10'] },
             { id: 'dota', name: 'Dota 2', ranks: ['Herald', 'Guardian', 'Legend', 'Immortal'] },
@@ -309,4 +306,8 @@
                     <div class="input-group">
                         <label class="input-label">Время игры</label>
                         <input type="time" class="text-input" value="20:00">
-                    </di
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Пол</label>
+                        <div class="gender-grid">
+           
