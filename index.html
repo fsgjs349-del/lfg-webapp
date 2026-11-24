@@ -3,193 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LFG | Looking For Group</title>
+    <title>DoubleMid</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #050505; color: #e4e4e7; height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
-        }
-
-        /* --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ БЕЗ JS --- */
-        /* Скрываем все радио-кнопки */
-        input[type="radio"] { display: none; }
-
-        /* Все экраны скрыты по умолчанию */
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; flex-direction: column; background: #050505; z-index: 1;
-        }
-
-        /* Показываем экран, если выбрана соответствующая радио-кнопка */
-        #step0:checked ~ #screen0,
-        #step1:checked ~ #screen1,
-        #step2:checked ~ #screen2,
-        #step3:checked ~ #screen3,
-        #step4:checked ~ #screen4,
-        #step5:checked ~ #screen5 { display: flex; }
-
-        /* --- ДИЗАЙН --- */
-        .bg-emoji { position: absolute; opacity: 0.05; font-size: 50px; animation: float 10s infinite linear; z-index: 0; }
-        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
-
-        .start-screen { justify-content: center; align-items: center; text-align: center; padding: 20px; z-index: 10; }
-        .logo-main { font-size: 68px; font-weight: 900; letter-spacing: 4px; color: #fff; text-shadow: 0 0 50px rgba(139, 92, 246, 0.7); margin-bottom: 5px; }
-        .logo-sub { font-size: 13px; letter-spacing: 7px; color: #71717a; text-transform: uppercase; margin-bottom: 30px; }
-        .start-desc { color: #a1a1aa; font-size: 15px; line-height: 1.6; margin-bottom: 40px; max-width: 300px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #09090b; color: #fff; height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
-        .start-btn {
-            background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; border: none; border-radius: 16px;
-            font-size: 18px; font-weight: 700; padding: 20px; width: 100%; max-width: 300px; cursor: pointer;
-            box-shadow: 0 8px 0 #4c1d95; display: block; margin: 0 auto; text-align: center; text-decoration: none;
-        }
-        .start-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #4c1d95; }
+        /* Экраны */
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #09090b; display: flex; flex-direction: column; transition: transform 0.3s ease, opacity 0.3s ease; z-index: 1; }
+        .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; z-index: 0; }
 
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-shrink: 0; z-index: 5; }
-        .back-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; color: #a1a1aa; font-size: 20px; cursor: pointer; text-decoration: none; }
-        .progress-container { flex: 1; margin: 0 15px; height: 6px; background: #27272a; border-radius: 3px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #ff007f, #8b5cf6); width: 20%; border-radius: 3px; }
-        .progress-text { font-size: 13px; color: #71717a; font-weight: 800; }
+        /* Туториал */
+        .tutorial-screen { padding: 20px; display: flex; flex-direction: column; }
+        .tutorial-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; font-size: 14px; font-weight: 600; color: #a1a1aa; }
+        .skip-btn { color: #a1a1aa; cursor: pointer; }
+        
+        .tutorial-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: left; width: 100%; }
+        .tutorial-img-box { width: 100%; height: 250px; background: #18181b; border-radius: 20px; margin-bottom: 30px; border: 1px solid #27272a; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative; }
+        .tutorial-text-block { width: 100%; }
+        .tutorial-step { color: #ec4899; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+        .tutorial-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 15px; text-transform: uppercase; }
+        .tutorial-desc { font-size: 15px; color: #a1a1aa; line-height: 1.5; margin-bottom: 30px; }
 
-        .form-container { flex: 1; padding: 10px 20px 20px 20px; overflow-y: auto; display: flex; flex-direction: column; z-index: 2; width: 100%; }
-        .step-title { font-size: 26px; font-weight: 800; margin-bottom: 10px; color: #fff; font-family: 'Georgia', serif; text-align: left; }
-        .step-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 25px; line-height: 1.5; text-align: left; }
+        .tutorial-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: #3f3f46; }
+        .dot.active { background: #ec4899; width: 20px; border-radius: 4px; }
 
-        .checkbox-card { display: flex; align-items: center; gap: 15px; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; padding: 20px; border-radius: 16px; margin-bottom: 20px; }
-        .checkbox-box { width: 26px; height: 26px; border-radius: 6px; border: 2px solid #52525b; display: flex; justify-content: center; align-items: center; background: #8b5cf6; border-color: #8b5cf6; }
-        .checkbox-box svg { width: 16px; height: 16px; fill: white; }
-        .checkbox-text { font-size: 15px; color: #e4e4e7; font-weight: 600; }
+        .tut-btn { width: 100%; padding: 18px; border-radius: 16px; border: none; font-size: 16px; font-weight: 700; color: white; cursor: pointer; background: #ec4899; margin-bottom: 20px; }
 
-        .input-group { margin-bottom: 20px; width: 100%; }
-        .input-label { font-size: 11px; color: #71717a; text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 800; }
-        .text-input { width: 100%; background: rgba(24, 24, 27, 0.8); border: 1px solid #3f3f46; color: #fff; padding: 15px; border-radius: 12px; font-size: 15px; outline: none; }
+        /* Главное меню */
+        .main-screen { padding: 0; display: flex; flex-direction: column; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { font-size: 24px; font-weight: 900; background: linear-gradient(90deg, #ff007f, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .top-icons { display: flex; gap: 15px; }
+        .top-icons svg { width: 24px; height: 24px; fill: #a1a1aa; }
 
-        .bottom-actions { margin-top: auto; padding-top: 20px; display: flex; gap: 12px; flex-shrink: 0; z-index: 5; width: 100%; }
-        .btn { border: none; border-radius: 14px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; text-decoration: none; padding: 18px; }
-        .btn-primary { background: linear-gradient(180deg, #8b5cf6, #6d28d9); color: white; box-shadow: 0 5px 0 #4c1d95; }
-        .btn-primary:active { transform: translateY(3px); box-shadow: 0 1px 0 #4c1d95; }
-        .btn-secondary { background: rgba(24, 24, 27, 0.8); color: #e4e4e7; border: 1px solid #3f3f46; box-shadow: 0 5px 0 #09090b; }
-        .btn-secondary:active { transform: translateY(3px); box-shadow: 0 1px 0 #09090b; }
-        .btn-half { flex: 1; }
+        /* Свайп-зона */
+        .swipe-area { flex: 1; padding: 10px 20px; display: flex; flex-direction: column; position: relative; }
+        .card { flex: 1; background: #18181b; border-radius: 24px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; border: 1px solid #27272a; }
+        .card-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .card-info { position: relative; z-index: 2; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        .card-name { font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .card-details { font-size: 14px; color: #d4d4d8; margin-top: 5px; display: flex; align-items: center; gap: 10px; }
+        .card-game-tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; margin-top: 15px; font-size: 12px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* Кнопки действий */
+        .action-buttons { display: flex; justify-content: center; align-items: center; gap: 15px; padding: 20px; padding-bottom: 30px; }
+        .btn-act { border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: none; }
+        .btn-small { width: 44px; height: 44px; background: #18181b; border: 1px solid #27272a; position: relative; }
+        .btn-small svg { width: 20px; height: 20px; fill: #a1a1aa; }
+        .btn-big { width: 64px; height: 64px; background: #18181b; border: 1px solid #27272a; }
+        .btn-big svg { width: 28px; height: 28px; fill: #a1a1aa; }
+        .btn-like { width: 80px; height: 80px; background: #ec4899; box-shadow: 0 0 20px rgba(236,72,153,0.4); }
+        .btn-like svg { width: 36px; height: 36px; fill: white; }
+        .btn-dislike { width: 64px; height: 64px; background: transparent; border: 1px solid #ff3b5c; }
+        .btn-dislike svg { width: 28px; height: 28px; fill: #ff3b5c; }
+        
+        .badge { position: absolute; top: -5px; right: -5px; background: #ec4899; color: white; font-size: 10px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid #09090b; }
+
+        /* Нижнее меню */
+        .bottom-nav { display: flex; justify-content: space-around; padding: 10px 0; background: #09090b; border-top: 1px solid #27272a; padding-bottom: env(safe-area-inset-bottom, 15px); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #52525b; cursor: pointer; font-size: 10px; font-weight: 600; }
+        .nav-item.active { color: #ec4899; }
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
     </style>
 </head>
 <body>
 
-    <div class="bg-emoji" style="left: 10%;">🎮</div>
-    <div class="bg-emoji" style="left: 30%; animation-delay: 2s;">🏆</div>
-    <div class="bg-emoji" style="left: 70%; animation-delay: 4s;">💬</div>
+    <!-- ЭКРАН ТУТОРИАЛА -->
+    <div class="screen tutorial-screen" id="tutScreen">
+        <div class="tutorial-header">
+            <span>КАК ПОЛЬЗОВАТЬСЯ</span>
+            <span class="skip-btn" onclick="skipTutorial()">Пропустить</span>
+        </div>
+        
+        <div class="tutorial-content" id="tutContent">
+            <!-- Сюда рендерятся шаги туториала через JS -->
+        </div>
 
-    <!-- РАДИО-КНОПКИ ДЛЯ УПРАВЛЕНИЯ ЭКРАНАМИ (СКРЫТЫ) -->
-    <input type="radio" name="screen" id="step0" checked>
-    <input type="radio" name="screen" id="step1">
-    <input type="radio" name="screen" id="step2">
-    <input type="radio" name="screen" id="step3">
-    <input type="radio" name="screen" id="step4">
-    <input type="radio" name="screen" id="step5">
-
-    <!-- СТАРТОВЫЙ ЭКРАН -->
-    <div class="screen start-screen" id="screen0">
-        <div class="logo-main">LFG</div>
-        <div class="logo-sub">Looking for group</div>
-        <div class="start-desc">Найди своих идеальных напарников для игр.</div>
-        <!-- Кнопка, которая включает step1 -->
-        <label for="step1" class="start-btn">Создать анкету</label>
+        <div class="tutorial-dots" id="tutDots"></div>
+        <button class="tut-btn" id="tutBtn" onclick="nextTutorialStep()">Далее</button>
     </div>
 
-    <!-- ЭТАП 1 -->
-    <div class="screen" id="screen1">
-        <div class="header">
-            <label for="step0" class="back-btn">←</label>
-            <div class="progress-container"><div class="progress-bar" style="width: 20%;"></div></div>
-            <span class="progress-text">1/5</span>
-        </div>
-        <div class="form-container">
-            <div class="step-title">Правила</div>
-            <div class="step-desc">Ознакомься с правилами.</div>
-            <div class="checkbox-card">
-                <div class="checkbox-box"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
-                <div class="checkbox-text">Я согласен</div>
-            </div>
-            <div class="bottom-actions">
-                <!-- Кнопка на step2 -->
-                <label for="step2" class="btn btn-primary btn-half" style="width: 100%;">Далее</label>
+    <!-- ГЛАВНОЕ МЕНЮ (КАРТОЧКИ) -->
+    <div class="screen main-screen hidden" id="appScreen">
+        <div class="top-bar">
+            <div class="logo">♥ DOUBLEMID</div>
+            <div class="top-icons">
+                <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
             </div>
         </div>
-    </div>
 
-    <!-- ЭТАП 2 -->
-    <div class="screen" id="screen2">
-        <div class="header">
-            <label for="step1" class="back-btn">←</label>
-            <div class="progress-container"><div class="progress-bar" style="width: 40%;"></div></div>
-            <span class="progress-text">2/5</span>
-        </div>
-        <div class="form-container">
-            <div class="step-title">Ник</div>
-            <div class="step-desc">Введи свой ник.</div>
-            <div class="input-group"><label class="input-label">Ник</label><input type="text" class="text-input" placeholder="Ник"></div>
-            <div class="bottom-actions">
-                <label for="step3" class="btn btn-primary btn-half" style="width: 100%;">Далее</label>
+        <div class="swipe-area">
+            <div class="card">
+                <!-- Заглушка вместо фото (градиент) -->
+                <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(145deg, #27272a, #18181b);"></div>
+                
+                <div class="card-info">
+                    <div class="card-name">gamerarossi, 19 <span style="color: #00e5ff;">♂</span></div>
+                    <div class="card-details">🇷🇺 Каменск-Уральский | 💻</div>
+                    <div class="card-game-tag">💥 Мир танков</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- ЭТАП 3 -->
-    <div class="screen" id="screen3">
-        <div class="header">
-            <label for="step2" class="back-btn">←</label>
-            <div class="progress-container"><div class="progress-bar" style="width: 60%;"></div></div>
-            <span class="progress-text">3/5</span>
-        </div>
-        <div class="form-container">
-            <div class="step-title">Игра</div>
-            <div class="step-desc">Выбери игру.</div>
-            <div class="games-grid">
-                <div class="game-card"><div class="game-name">CS2</div></div>
-                <div class="game-card"><div class="game-name">Dota 2</div></div>
+        <div class="action-buttons">
+            <div class="btn-act btn-small">
+                <div class="badge">3</div>
+                <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
             </div>
-            <div class="bottom-actions">
-                <label for="step4" class="btn btn-primary btn-half" style="width: 100%;">Далее</label>
+            <div class="btn-act btn-dislike">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+            <div class="btn-act btn-big">
+                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div class="btn-act btn-like">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="btn-act btn-small">
+                <div class="badge">1</div>
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             </div>
         </div>
-    </div>
 
-    <!-- ЭТАП 4 -->
-    <div class="screen" id="screen4">
-        <div class="header">
-            <label for="step3" class="back-btn">←</label>
-            <div class="progress-container"><div class="progress-bar" style="width: 80%;"></div></div>
-            <span class="progress-text">4/5</span>
-        </div>
-        <div class="form-container">
-            <div class="step-title">Страна</div>
-            <div class="step-desc">Твоя страна.</div>
-            <div class="country-grid">
-                <div class="country-btn">Россия</div>
-                <div class="country-btn">Беларусь</div>
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <span>Поиск</span>
             </div>
-            <div class="bottom-actions">
-                <label for="step5" class="btn btn-primary btn-half" style="width: 100%;">Далее</label>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <span>Лайки</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                <span>Рандом</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                <span>Чаты</span>
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>Профиль</span>
             </div>
         </div>
     </div>
 
-    <!-- ЭТАП 5 -->
-    <div class="screen" id="screen5">
-        <div class="header">
-            <label for="step4" class="back-btn">←</label>
-            <div class="progress-container"><div class="progress-bar" style="width: 100%;"></div></div>
-            <span class="progress-text">5/5</span>
-        </div>
-        <div class="form-container">
-            <div class="step-title">Готово!</div>
-            <div class="step-desc">Ты молодец.</div>
-            <div class="bottom-actions">
-                <label for="step0" class="btn btn-primary btn-half" style="width: 100%;">В начало</label>
-            </div>
-        </div>
-    </div>
+    <script>
+        // --- ТУТОРИАЛ ---
+        let tutStep = 1;
+        const totalTutSteps = 7;
 
+        const tutData = [
+            { step: 1, title: 'НЯШКИ ИЛИ ТИММЕЙТЫ', desc: 'Сверху выбираешь, кого ищешь. Справа фильтры и кнопка обновления ленты.', color: '#00e5ff', emoji: '🎮' },
+            { step: 2, title: 'Взаимный лайк, значит мэтч', desc: 'Во вкладке «Лайки» видно, кто лайкнул тебя. Лайкни в ответ, и откроется чат.', color: '#ec4899', emoji: '❤️' },
+            { step: 3, title: 'Рандомный чат', desc: 'Случайный собеседник прямо сейчас. Напишите по 5 сообщений, и можно стать мэтчем.', color: '#8b5cf6', emoji: '🔀' },
+            { step: 4, title: 'Голосовые, стикеры, GIF', desc: 'Голосовое до 3 минут. Двойной тап по сообщению ставит ❤️.', color: '#00e5ff', emoji: '💬' },
+            { step: 5, title: 'Telegram, Discord, Steam', desc: 'Кнопка слева от поля ввода. Откроется, когда каждый напишет по 5 сообщений.', color: '#ec4899', emoji: '🔗' },
+            { step: 6, title: 'Я на связи', desc: 'Что-то сломалось или есть идея? Профиль -> «Поддержка».', color: '#8b5cf6', emoji: '🆘' },
+            { step: 7, title: 'Погнали!', desc: 'Ты готов найти своего идеального тиммейта или няшку.', color: '#00e5ff', emoji: '🚀' }
+        ];
+
+        function renderTutorial() {
+            const content = document.getElementById('tutContent');
+            const dots = document.getElementById('tutDots');
+            const btn = document.getElementById('tutBtn');
+            const data = tutData[tutStep - 1];
+
+            content.innerHTML = `
+                <div class="tutorial-img-box" style="border-color: ${data.color}40;">
+                    <span style="font-size: 80px;">${data.emoji}</span>
+                </div>
+                <div class="tutorial-text-block">
+                    <div class="tutorial-step" style="color: ${data.color};">${data.step} • РЕЖИМЫ</div>
+                    <div class="tutorial-title">${data.title}</div>
+                    <div class="tutorial-desc">${data.desc}</div>
+                </div>
+            `;
+
+            dots.innerHTML = '';
+            for (let i = 1; i <= totalTutSteps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === tutStep ? ' active' : '');
+                dots.appendChild(dot);
+            }
+
+            if (tutStep === totalTutSteps) {
+                btn.innerText = 'Начать';
+                btn.style.background = 'linear-gradient(90deg, #ec4899, #8b5cf6)';
+            } else {
+                btn.innerText = 'Далее';
+                btn.style.background = '#ec4899';
+            }
+        }
+
+        function nextTutorialStep() {
+            if (tutStep < totalTutSteps) {
+                tutStep++;
+                renderTutorial();
+            } else {
+                skipTutorial();
+            }
+        }
+
+        function skipTutorial() {
+            document.getElementById('tutScreen').classList.add('hidden');
+            document.getElementById('appScreen').classList.remove('hidden');
+        }
+
+        // Инициализация
+        renderTutorial();
+
+    </script>
 </body>
 </html>
